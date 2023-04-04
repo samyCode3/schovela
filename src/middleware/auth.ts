@@ -4,20 +4,19 @@ import { ApiResponseType } from '../interface/api.interface';
 import {
     StatusCodes
    } from 'http-status-codes'
+import { UserModel } from '../model/user.model';
 export const NotVerifiedUser = async (req, res, next): Promise<ApiResponseType> => {
    try {
       const authHeader = req.headers.authorization
       if (!authHeader) {
-        return {
-          ok: false,
-          status: StatusCodes.UNAUTHORIZED,
-          message: 'User is not authorized'
-        }
+      return res.status(StatusCodes.UNAUTHORIZED).json( { ok: false, status: StatusCodes.UNAUTHORIZED, message: 'User is not authorized'
+        })
       }
   
       const token = authHeader.split(" ")[1];
       const userToken = await verifyTokens(token, process.env.BEERER_TOKEN)
-      if (!userToken) {
+      const findUser = await UserModel.findOne({where : { email : userToken.data.email}})
+      if (!findUser) {
         return {
           ok: false,
           status: StatusCodes.FORBIDDEN,

@@ -33,7 +33,7 @@ export const verifySchema = (payload: IverifyUser): Promise<ApiResponseType> => 
 export const UserInfoSchema = (schema: IUserInfo) : Promise<ApiResponseType> => {
   const body = Joi.object({
       department : Joi.string().required(),
-      level : Joi.string().valid('100', '200', '300', '400', '500', '600').required(),
+      level : Joi.number().required(),
       account_type: Joi.string().required(),
       faculty: Joi.string().required(),
       DOB: Joi.string().required()

@@ -9,6 +9,6 @@ export const accessToken =  (payload: any) => {
     return  jwt.sign({data:{ email: payload.email, fullname: payload.fullname, id: payload.id}}, access)
 }
 
-export const verifyTokens = async (payload: any, Tokens: string) => {
+export const verifyTokens = async (payload: string, Tokens: string) => {
      return await jwt.verify(payload, Tokens)
 }
