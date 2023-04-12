@@ -1,5 +1,5 @@
 import './envConfig'
-export = {
+export default {
    PORT : process.env.PORT || '4000',
    DATABASE : {
       HOST: process.env.HOST || '',
@@ -19,5 +19,4 @@ export = {
    BEARER_TOKEN: process.env.BEERER_TOKEN,
    ACCESS_TOKEN: process.env.ACCESS_TOKEN,
   }
- 
 }

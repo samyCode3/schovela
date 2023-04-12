@@ -1,10 +1,11 @@
 import * as express from 'express'
-import * as config from 'config'
+// import * as config from 'config'
+import config from './config/default';
 import * as cors from 'cors'
 import {sequelize}  from './config/database'
 import {router} from './routes/auth.routes'
 import './model/index'
-const port = config.get<number>('PORT')
+const port = config.PORT;
 const app = express()
 const connections = async() =>{
     try{
