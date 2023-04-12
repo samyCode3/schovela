@@ -1,5 +1,5 @@
 import { Model, DataTypes, DATE, Sequelize } from "sequelize";
-import { sequelize } from "../../config/database";
+import { sequelize } from "../config/database";
 
 class User extends Model {
   declare fullname : string;

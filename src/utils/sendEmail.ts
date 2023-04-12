@@ -1,4 +1,4 @@
-import { mail } from "../../config/emailConfig";
+import { mail } from "../config/emailConfig";
 import {
  StatusCodes
 } from 'http-status-codes'

@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as config from 'config'
 import * as cors from 'cors'
-import {sequelize}  from './../config/database'
+import {sequelize}  from './config/database'
 import {router} from './routes/auth.routes'
 import './model/index'
 const port = config.get<number>('PORT')
