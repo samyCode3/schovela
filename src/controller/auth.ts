@@ -4,13 +4,17 @@ import {
   verifyUser,
   ResentOtp,
   UserInfo,
-  LoginUser
+  LoginUser,
+  forgottenPassword,
+  ResetPassword
 } from "../services/auth.service"
 import {
   registerSchema,
   verifySchema,
   UserInfoSchema,
   loginSchema,
+  ForgottenPasswordSchema,
+  ResetPasswordSchema 
 
 } from "../utils/validation/joi";
 export const registerController = async (req, res) => {
@@ -25,7 +29,7 @@ export const registerController = async (req, res) => {
   }
 };
 
-export const VerifyUserAccount = async (req, res) => {
+export const VerifyUserAccountController = async (req, res) => {
  const  {body, user} = req
  let payload
  try {
@@ -33,19 +37,19 @@ export const VerifyUserAccount = async (req, res) => {
   const userControl = await verifyUser(payload, user);
   return res.status(userControl.status).json({ ...userControl });
 } catch (error) {
-  return res.status(500).json({ ...error });
+  return res.status(error.status).json({ ...error });
 }
 }
 
-// export const ResendUserOtp = async (req, res) => {
-//    const {body} = req.body
-//    try {
-//     const user = await ResentOtp(body);
-//     return res.status(user.status).json({ ...user });
-//    } catch (error) {
-//     return res.status(500).json({ ...error });
-//    }
-// }
+export const ResendUserOtp = async (req, res) => {
+   const {user} = req
+   try {
+    const users= await ResentOtp(user);
+    return res.status(users.status).json({ ...users });
+   } catch (error) {
+    return res.status(error.status).json({ ...error });
+   }
+}
 export const LoginUserController = async (req, res) => {
   const  {body} = req
   let payload
@@ -54,10 +58,11 @@ export const LoginUserController = async (req, res) => {
    const user = await LoginUser(payload);
    return res.status(user.status).json({ ...user });
  } catch (error) {
-   return res.status(500).json({ ...error });
+  console.log(error)
+   return res.status(error.status).json({ ...error });
  }
 }
-export const UserInfos = async (req, res) => {
+export const UserInfosController = async (req, res) => {
   const  {body} = req
   let payload
   try {
@@ -67,6 +72,32 @@ export const UserInfos = async (req, res) => {
    return res.status(user.status).json({ ...user });
  } catch (error) {
   console.log(error)
-   return res.status(500).json({ ...error });
+   return res.status(error.status).json({ ...error });
+ }
+}
+
+export const ForgottenPasswordController = async (req, res) => {
+ const {body} = req
+ let payload
+ try {
+    payload = await ForgottenPasswordSchema(body)
+    const user = await forgottenPassword(payload)
+    return res.status(user.status).json({ ...user });
+ } catch (error) {
+  console.log(error)
+  return res.status(error.status).json({ ...error });
+ }
+}
+
+export const ResetController = async (req, res) => {
+  const {body} = req
+  let payload
+  try {
+    payload = await ResetPasswordSchema(body)
+    const user = await ResetPassword(payload)
+    return res.status(user.status).json({ ...user });
+ } catch (error) {
+  console.log(error)
+  return res.status(error.status).json({ ...error });
  }
 }

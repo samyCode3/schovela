@@ -1,3 +1,4 @@
+
 export interface IUser {
   fullname: string,
   email : string,
@@ -31,4 +32,14 @@ export interface IverifyUser {
 export interface ILogin {
   email : string,
   password: string
+}
+
+export interface IForgotten {
+  email :  string
+}
+
+export interface IChangePassword {
+  email : string,
+  code: string,
+  NewPassword: string
 }

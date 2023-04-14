@@ -60,6 +60,11 @@ User.init(
       allowNull: false,
       defaultValue: "",
     },
+    resetToken : {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
     status: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

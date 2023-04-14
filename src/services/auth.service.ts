@@ -2,19 +2,19 @@ import { UserModel } from '../model/user.model'
 import  messages from '../utils/messages'
 import {emailTemplete} from '../templete/email.templete'
 import {token} from '../packages/otp'
-import {encryptData, decryptData} from  '../helper/encryption'
-import {bearerToken, accessToken} from '../helper/token'
-import { IRegister, IUserInfo,  IverifyUser, IUser, ILogin} from '../interface/user.interface';
+import {decrypt, encrypt} from  '../helper/encryption'
+import {bearerToken} from '../helper/token'
+import {IRegister, IUserInfo,  IverifyUser, IUser, ILogin, IForgotten, IChangePassword } from '../interface/user.interface';
 import { ApiResponseType } from '../interface/api.interface';
 import {
  StatusCodes
 } from 'http-status-codes'
 
+
 export const registerService  =  async (payload: IRegister): Promise<ApiResponseType> => {
-   try {
     const  findUser = await UserModel.findOne({ where: { email: payload.email }})
     if(findUser) {
-       return {
+       throw {
          ok: false,
          status : StatusCodes.BAD_REQUEST,
          message : messages.DUPLICATE_EMAIL
@@ -24,110 +24,134 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
     console.log(otp)
     // const sendMail = await emailTemplete(payload.email, otp) 
     const bearerTokens = await bearerToken(payload)
-    // if(!sendMail) {
-    //   return {
-    //      ok: false,
-    //      status: StatusCodes.BAD_GATEWAY,
-    //      message : 'Unable to communicate with server'
-    //    }
-    // } 
-    const confirmationCode =  await encryptData(otp)
-    const registerUser =  await UserModel.create({confirmationCode, ...payload})
+    const confirmationCode =  await encrypt(otp)
+    const user =  await UserModel.create({confirmationCode, ...payload})
      return {
        ok: true,
-       message: 'User is registered successfully',
-       status: StatusCodes.OK,
-       body: {registerUser, bearerTokens} 
+       message: messages.CREATED,
+       status: StatusCodes.CREATED,
+       body: {user, bearerTokens} 
      }
-   } catch (error) {
-    if(error) {return { ok: false, status: StatusCodes.INTERNAL_SERVER_ERROR, message: error.message,}}
-   }
-       
- }
-//  566605
+   } 
+
+   //verifyUser
 export  const  verifyUser = async (payload:  IverifyUser, user: IUser): Promise<ApiResponseType> => {
-  try {
     const email = user.data.email
     const { code, password } = payload
     const findUser =  await UserModel.findOne({ where: { email: email }})
-    const verifyCode =  await decryptData(code, findUser.confirmationCode)
-    if( !findUser || !verifyCode) { return { ok: false, status: StatusCodes.BAD_REQUEST,message: 'Invalid code provide provide'}}
-    const Token = await accessToken(findUser)
-    const UserPassword = await encryptData(password)
+    const verifyCode =  await decrypt(code, findUser.confirmationCode)
+    if( !findUser || !verifyCode) { return { ok: false, status: StatusCodes.BAD_REQUEST,message: messages.INCORRECT_OTP_CODE}}
+  
+    const UserPassword = await encrypt(password)
     await UserModel.update({status: true, confirmationCode: '', password : UserPassword}, {where: {email : email}})
-    return { ok: true, status: StatusCodes.OK, message : 'You can now process to the next step', body : {Token}}
-  } catch (error) {
-    if(error) {return { ok: false, status: StatusCodes.INTERNAL_SERVER_ERROR, message: error.message,}}
-  }
+   
+    return { ok: true, status: StatusCodes.OK, message : messages.CONTINUE, body :{ user}}
+  
 }
 //Resend Otp 
 export const ResentOtp = async (user: IUser) => {
-     try {
           const email = user.data.email
           const findUser =  await UserModel.findOne({ where: { email: email }})
           if(!findUser || findUser.status != false) {
-            return { ok: false, status: StatusCodes.FORBIDDEN, message: 'Sorry you cant make this request'}
+            throw { ok: false, status: StatusCodes.BAD_REQUEST, message: messages.VERIFIED}
           }
           const otp = await token
-          const sendMail = await emailTemplete(email, otp) 
-          if(!sendMail) {
-            return {
-               ok: false,
-               status: StatusCodes.BAD_GATEWAY,
-               message : 'Unable to communicate with server'
-             }
-          } 
-          const confirmationCode =  await encryptData(otp)
+          console.log(otp)
+          // const sendMail = await emailTemplete(email, otp) 
+          const confirmationCode =  await encrypt(otp)
           await UserModel.update({confirmationCode: confirmationCode}, {where: {email : email}})
           return {
             ok: true,
            status: StatusCodes.OK,
-           message: 'Check email for otp',
+           message: messages.CHECK_FOR_OTP,
           } 
-     } catch (error) {
-      if(error) {return { ok: false, status: StatusCodes.INTERNAL_SERVER_ERROR, message: error.message,}}
      }
-}
+
 //User Info 
 export const UserInfo = async (payload: IUserInfo, user: IUser): Promise<ApiResponseType> => {
     const email = user.data.email
-    const findUser =  await UserModel.findOne({ where: { email: email }})
-    if(!findUser || findUser.status != true) {
-      return { ok: false, status: StatusCodes.UNAUTHORIZED, message: 'Please verify ur account before you process'}
+    const users =  await UserModel.findOne({ where: { email: email }})
+    if(!users || users.status != true) {
+      return { ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED_REQUEST}
     }
-   const update = await UserModel.update({ ...payload }, {where : {email : email}})
-   return {
+    await UserModel.update({ ...payload }, {where : {email : email}}) 
+    delete users.password
+    // users.save()
+    return {
     ok: true,
     status: StatusCodes.OK,
-    message: 'Your profile is saved, you can process to login',
-    body : { update  }
+    message: messages.INFO_ADDED,
+    body : { users  }
   }
 } 
 //Login User
 export const LoginUser = async (payload:  ILogin) => {
    const {email , password} = payload
-   const findUser = await UserModel.findOne({ where: { email: email }})
-   console.log(findUser.password)
-   if(!findUser || findUser.status != true) {
-    return {
+   const user = await UserModel.findOne({ where: { email: email }})
+
+   if(!user) {
+    throw {
       ok : false, 
       status: StatusCodes.BAD_REQUEST,
-      message: 'Incorrect email or password'
+      message: messages.INCORRECT_LOGIN_DETAILS
     }
    }
-   const comparePassword = await decryptData(password, findUser.password)
-   
+   const comparePassword = await decrypt(password, user.password)
    if(!comparePassword) {
-    return {
+    throw {
       ok : false, 
       status: StatusCodes.BAD_REQUEST,
-      message: 'Incorrect email or password'
+      message: messages.INCORRECT_LOGIN_DETAILS,
     }
    }
    return {
     ok : true,
     status: StatusCodes.OK,
-    message: 'User is loggedin'
+    message: messages.LOGGEDIN
    }
 }
 //Forget Password
+export const forgottenPassword = async (payload: IForgotten): Promise<ApiResponseType> => {
+  const { email } = payload
+  const user = await UserModel.findOne({ where: { email: email}})
+ 
+  if(!user) {
+    throw {
+       ok: false, 
+       status: StatusCodes.NOT_FOUND,
+       message: messages.USER_NOT_FOUND
+    }
+  }
+  const otp = await token
+  console.log(otp)
+  // await emailTemplete(otp, email)
+  const resetToken = await encrypt(otp)
+  await UserModel.update({ resetToken }, {where : { email : email}})
+  return {
+    ok: true,
+    status: StatusCodes.OK,
+    message: messages.CHECK_FOR_OTP
+  }
+
+}
+
+export const ResetPassword  = async (payload: IChangePassword ): Promise<ApiResponseType> => {
+   let {email, code, NewPassword} = payload
+   const user =  await UserModel.findOne({ where : { email : email}})
+   const decryptCode = await decrypt(code, user.resetToken)
+   if(!decryptCode) {
+    throw {
+      ok: false,
+      status: StatusCodes.FORBIDDEN,
+      message: messages.INCORRECT_OTP_CODE
+    }
+   }
+   NewPassword = await encrypt(NewPassword)
+   await UserModel.update({ password: NewPassword, resetToken : '' }, {where : { email : email}})
+   return {
+      ok: true,
+      status: StatusCodes.OK,
+      message: messages.PASSWORD_IS_CHANGED 
+   }
+   
+}
