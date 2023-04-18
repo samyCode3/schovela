@@ -27,7 +27,15 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
     // const sendMail = await emailTemplete(payload.email, otp) 
     const bearerTokens = await bearerToken(payload)
     const confirmationCode =  await encrypt(otp)
-    const user =  await UserModel.create({confirmationCode, ...payload})
+    let user;
+    if(findUser){
+      user = findUser;
+      user.confirmationCode = confirmationCode;
+      user.fullname = payload.fullname;
+      await user.save();
+    }else{
+      user = await UserModel.create({confirmationCode, ...payload});
+    }
      return {
        ok: true,
        message: messages.CREATED,
