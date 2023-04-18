@@ -12,15 +12,17 @@ import {
 
 
 export const registerService  =  async (payload: IRegister): Promise<ApiResponseType> => {
-    const  findUser = await UserModel.findOne({ where: { email: payload.email }})
+    const  findUser = await UserModel.findOne({ where: { email: payload.email }});
     if(findUser) {
-       throw {
-         ok: false,
-         status : StatusCodes.BAD_REQUEST,
-         message : messages.DUPLICATE_EMAIL
-       }
+      if(findUser.password != '' || findUser.status !== false){
+        throw {
+          ok: false,
+          status : StatusCodes.BAD_REQUEST,
+          message : messages.DUPLICATE_EMAIL
+        }
+      }
     } 
-    const otp = await token
+    const otp = token;
     console.log(otp)
     // const sendMail = await emailTemplete(payload.email, otp) 
     const bearerTokens = await bearerToken(payload)

@@ -11,7 +11,7 @@ export const NotVerifiedUser = async (req, res, next): Promise<ApiResponseType> 
    try {
       const authHeader = req.headers.authorization
       if (!authHeader) {
-      throw res.status(StatusCodes.UNAUTHORIZED).json( { ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED
+      return res.status(StatusCodes.UNAUTHORIZED).json( { ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED
         })
       }
   
@@ -19,7 +19,7 @@ export const NotVerifiedUser = async (req, res, next): Promise<ApiResponseType> 
       const userToken = await verifyTokens(token, process.env.BEERER_TOKEN)
       const findUser = await UserModel.findOne({where : { email : userToken.data.email}})
       if (!findUser) {
-        throw {
+        return {
           ok: false,
           status: StatusCodes.FORBIDDEN,
           message: messages.FORBIDDEN
@@ -38,7 +38,7 @@ export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => 
       const email = req.user.data.email
       const user = await UserModel.findOne({ where: { email : email}})
       if(user.status !== true) {
-        throw {
+        return {
           ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED
        
         }
