@@ -12,7 +12,7 @@ class User extends Model {
   declare faculty: string;
   declare confirmationCode: string;
   declare status : boolean
-
+  declare resetToken : string
 }
 
 User.init(

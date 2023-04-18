@@ -55,8 +55,8 @@ export const ResentOtp = async (user: IUser) => {
           if(!findUser || findUser.status != false) {
             throw { ok: false, status: StatusCodes.BAD_REQUEST, message: messages.VERIFIED}
           }
-          const otp = await token
-          console.log(otp)
+          const otp = token;
+          // console.log(otp)
           // const sendMail = await emailTemplete(email, otp) 
           const confirmationCode =  await encrypt(otp)
           await UserModel.update({confirmationCode: confirmationCode}, {where: {email : email}})
@@ -68,20 +68,26 @@ export const ResentOtp = async (user: IUser) => {
      }
 
 //User Info 
-export const UserInfo = async (payload: IUserInfo, user: IUser): Promise<ApiResponseType> => {
-    const email = user.data.email
-    const users =  await UserModel.findOne({ where: { email: email }})
-    if(!users || users.status != true) {
+export const UserInfo = async (payload: IUserInfo, auth: IUser): Promise<ApiResponseType> => {
+    const email = auth.data.email
+    let user =  await UserModel.findOne({ where: { email: email }})
+    if(!user || user.status != true) {
       return { ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED_REQUEST}
     }
-    await UserModel.update({ ...payload }, {where : {email : email}}) 
-    delete users.password
-    // users.save()
+    let keys = Object.keys(payload);
+    for(let i = 0; i < keys.length; i++){
+      user[keys[i]] = payload[keys[i]];
+    }
+    user.save()
+    user = user.dataValues;
+    delete user.password;
+    delete user.resetToken;
+    delete user.confirmationCode;
     return {
     ok: true,
     status: StatusCodes.OK,
     message: messages.INFO_ADDED,
-    body : { users  }
+    body : { user  }
   }
 } 
 //Login User
@@ -137,7 +143,7 @@ export const forgottenPassword = async (payload: IForgotten): Promise<ApiRespons
 
 export const ResetPassword  = async (payload: IChangePassword ): Promise<ApiResponseType> => {
    let {email, code, NewPassword} = payload
-   const user =  await UserModel.findOne({ where : { email : email}})
+   const user =  await UserModel.findOne({ where : { email : email}});
    const decryptCode = await decrypt(code, user.resetToken)
    if(!decryptCode) {
     throw {
