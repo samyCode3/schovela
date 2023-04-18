@@ -30,7 +30,7 @@ export const NotVerifiedUser = async (req, res, next): Promise<ApiResponseType> 
     } catch (err) {
       const error = new Error(err.message)
       console.error(error)
-      return res.status(403).json({ message: err.message })
+      return res.status(403).json({ok: false, status: StatusCodes.INTERNAL_SERVER_ERROR, message: err.message })
     }
 }
 export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => {
@@ -47,7 +47,7 @@ export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => 
   } catch (err) {
     const error = new Error(err.message)
     console.error(error) 
-    return res.status(403).json({ message: err.message }) 
+    return res.status(403).json({ok: false, status: StatusCodes.INTERNAL_SERVER_ERROR, message: err.message }) 
   }
 }
 

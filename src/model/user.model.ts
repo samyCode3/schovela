@@ -8,10 +8,10 @@ class User extends Model {
   declare department: string;
   declare level : string;
   declare account_type : string;
-  declare DOB : string;
+  declare dob : string;
   declare faculty: string;
   declare confirmationCode: string;
-  declare status : boolean
+  declare status : boolean;
   declare resetToken : string
 }
 
@@ -45,7 +45,7 @@ User.init(
       allowNull: false,
       defaultValue: "",
     },
-    DOB: {
+    dob: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "",
