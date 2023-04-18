@@ -11,7 +11,7 @@ export const NotVerifiedUser = async (req, res, next): Promise<ApiResponseType> 
    try {
       const authHeader = req.headers.authorization
       if (!authHeader) {
-      throw res.status(StatusCodes.UNAUTHORIZED).json( { ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED
+      return res.status(StatusCodes.UNAUTHORIZED).json( { ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED
         })
       }
   
@@ -19,7 +19,7 @@ export const NotVerifiedUser = async (req, res, next): Promise<ApiResponseType> 
       const userToken = await verifyTokens(token, process.env.BEERER_TOKEN)
       const findUser = await UserModel.findOne({where : { email : userToken.data.email}})
       if (!findUser) {
-        throw {
+        return {
           ok: false,
           status: StatusCodes.FORBIDDEN,
           message: messages.FORBIDDEN
@@ -30,7 +30,7 @@ export const NotVerifiedUser = async (req, res, next): Promise<ApiResponseType> 
     } catch (err) {
       const error = new Error(err.message)
       console.error(error)
-      return res.status(403).json({ message: err.message })
+      return res.status(403).json({ok: false, status: StatusCodes.INTERNAL_SERVER_ERROR, message: err.message })
     }
 }
 export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => {
@@ -47,7 +47,7 @@ export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => 
   } catch (err) {
     const error = new Error(err.message)
     console.error(error) 
-    return res.status(403).json({ message: err.message }) 
+    return res.status(403).json({ok: false, status: StatusCodes.INTERNAL_SERVER_ERROR, message: err.message }) 
   }
 }
 
