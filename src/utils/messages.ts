@@ -1,3 +1,5 @@
+
+
 export default {
     DUPLICATE_EMAIL : 'Email is already being used',
     CONNECTION_ERROR : 'Unable to communicate with server',
@@ -7,8 +9,13 @@ export default {
     CHECK_FOR_OTP: 'Check email for otp',
     UNAUTHORIZED_REQUEST: 'Please verify ur account before you process',
     INFO_ADDED: 'Your profile is saved, you can process to login',
-    INCCORRECT_LOGIN_DETAILS: 'Incorrect email or password',
-    INCOORRECT_OTP_CODE: 'Invalid code provided',
-    LOGGEDIN: 'User is loggedin'
+    INCORRECT_LOGIN_DETAILS: 'Incorrect email or password',
+    INCORRECT_OTP_CODE: 'Invalid code provided, Please check your mail for the correct code',
+    LOGGEDIN: 'User is loggedin',
+    UNAUTHORIZED: 'User is unauthorized',
+    USER_NOT_FOUND: 'User with this email do not exit on our database',
+    PASSWORD_IS_CHANGED : 'Password has been changed successfully',
+    VERIFIED: 'Sorry your account is already verified'
+
 
 }

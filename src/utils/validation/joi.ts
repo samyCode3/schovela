@@ -2,7 +2,7 @@ import * as Joi from 'joi'
 import {
  StatusCodes
 } from 'http-status-codes'
-import { IRegister, IverifyUser, IUserInfo, ILogin } from '../../interface/user.interface';
+import { IRegister, IverifyUser, IUserInfo, ILogin, IForgotten, IChangePassword } from '../../interface/user.interface';
 import { ApiResponseType } from '../../interface/api.interface';
 export const registerSchema = (payload: IRegister): Promise<ApiResponseType> => {
       const body = Joi.object({
@@ -56,4 +56,28 @@ export const loginSchema = (payload: ILogin): Promise<ApiResponseType> => {
       throw { ok : false, status: StatusCodes.BAD_REQUEST, message: error.message};
      }
      return value;
+}
+export const ForgottenPasswordSchema = (payload: IChangePassword) => {
+   const body = Joi.object({
+      email : Joi.string().required()
+   })
+   const {error, value} = body.validate(payload, {abortEarly: false})
+   if(error) {
+    throw { ok : false, status: StatusCodes.BAD_REQUEST, message: error.message};
+   }
+   return value;
+}
+
+export const ResetPasswordSchema = (payload: IForgotten) => {
+    const body = Joi.object({
+      email : Joi.string().email().required(),
+      code :  Joi.string().required(),
+      NewPassword: Joi.string().required().min(8).max(10000000000),
+      confirmPassword: Joi.ref("NewPassword")
+    })
+    const {error, value} = body.validate(payload, {abortEarly: false})
+    if(error) {
+     throw { ok : false, status: StatusCodes.BAD_REQUEST, message: error.message};
+    }
+    return value;
 }

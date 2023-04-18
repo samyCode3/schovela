@@ -2,7 +2,9 @@ import { mail } from "../config/emailConfig";
 import {
  StatusCodes
 } from 'http-status-codes'
-export const sendEmail = async (to, subject, text, html) => {
+import { ApiResponseType } from "../interface/api.interface";
+export const sendEmail = async (to, subject, text, html):  Promise<ApiResponseType> => {
+  try {
   const send = await mail.sendMail({
     from: `${process.env.SMTP_NAME}\n ${process.env.SMTP_EMAIL}`,
     to,
@@ -10,10 +12,9 @@ export const sendEmail = async (to, subject, text, html) => {
     text,
     html,
   });
-
-  try {
-    return send.messageId;
+   return { ok : true, status: StatusCodes.OK, message: send.messageId}
   } catch (error) {
     throw error;
   }
 };
+ 
