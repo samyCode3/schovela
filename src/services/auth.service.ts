@@ -23,8 +23,8 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
       }
     } 
     const otp = token;
-    console.log(otp)
-    // const sendMail = await emailTemplete(payload.email, otp) 
+    // console.log(otp)
+    const sendMail = await emailTemplete(payload.email, otp) 
     const bearerTokens = await bearerToken(payload)
     const confirmationCode =  await encrypt(otp)
     let user;
@@ -67,7 +67,7 @@ export const ResentOtp = async (user: IUser) => {
           }
           const otp = token;
           // console.log(otp)
-          // const sendMail = await emailTemplete(email, otp) 
+          const sendMail = await emailTemplete(email, otp) 
           const confirmationCode =  await encrypt(otp)
           await UserModel.update({confirmationCode: confirmationCode}, {where: {email : email}})
           return {
