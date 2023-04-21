@@ -18,7 +18,6 @@ export default {
     VERIFIED: 'Sorry your account is already verified',
     ALREADY_ADMIN: 'This user is already an admin',
     ELEVELATED_TO_ADMIN: 'This user is now an admin',
-    UNABLE_TO_SEND_EMAIL: 'Unable to send Email'
-
-
+    UNABLE_TO_SEND_EMAIL: 'Unable to send Email',
+    FAILED_TO_SEND_EMAIL : "Failed to send verification email please check the email you provided and try again."
 }

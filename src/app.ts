@@ -6,6 +6,7 @@ import {sequelize}  from './config/database'
 import {router} from './routes/auth.routes'
 import {UserRouter} from './routes/user.routes'
 import { AdminRoute } from './routes/admin.routes';
+import { seedData } from './model/admin.seed';
 import {
     StatusCodes
    } from 'http-status-codes'
@@ -22,8 +23,9 @@ const connections = async() =>{
         app.all("*", (req, res, next) => {
             return res.status(StatusCodes.NOT_FOUND).json({ ok: false, message: 'Route not found', body : `${req.method} - ${req.ip} - ${req.url}`})
         })
-       await sequelize.sync({ alter : true }).then(()=>{
+       await sequelize.sync({ alter : true }).then(async ()=>{
             console.log('Database connected successfully.');
+            await seedData()
         app.listen(port, () => console.log(`App running on port http://localhost:${port}`))
         }).catch((err)=>{
             throw err;
