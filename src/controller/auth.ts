@@ -17,6 +17,9 @@ import {
   ResetPasswordSchema 
 
 } from "../utils/validation/joi";
+import {
+  StatusCodes
+ } from 'http-status-codes'
 export const registerController = async (req, res) => {
   const { body } = req;
   let payload;
@@ -25,7 +28,7 @@ export const registerController = async (req, res) => {
     const registerUser = await registerService(payload);
     return res.status(registerUser.status).json({ ...registerUser });
   } catch (error) {
-    return res.status(error.status).json({ ...error });
+    return res.status(error.status).json({ok: false, status: error.status, message : error.message});
   }
 };
 
@@ -37,7 +40,7 @@ export const VerifyUserAccountController = async (req, res) => {
   const userControl = await verifyUser(payload, user);
   return res.status(userControl.status).json({ ...userControl });
 } catch (error) {
-  return res.status(error.status).json({ ...error });
+  return res.status(error.status).json({ok: false, status: error.status, message : error.message});
 }
 }
 
@@ -47,7 +50,7 @@ export const ResendUserOtp = async (req, res) => {
     const users= await ResentOtp(user);
     return res.status(users.status).json({ ...users });
    } catch (error) {
-    return res.status(error.status).json({ ...error });
+    return res.status(error.status).json({ok: false, status: error.status, message : error.message});
    }
 }
 export const LoginUserController = async (req, res) => {
@@ -59,7 +62,7 @@ export const LoginUserController = async (req, res) => {
    return res.status(user.status).json({ ...user });
  } catch (error) {
   console.log(error)
-   return res.status(error.status).json({ ...error });
+   return res.status(500).json({ ...error });
  }
 }
 export const UserInfosController = async (req, res) => {
@@ -68,11 +71,10 @@ export const UserInfosController = async (req, res) => {
   try {
    payload = await UserInfoSchema(body);
    const user = await UserInfo(payload, req.user);
-   console.log(user)
    return res.status(user.status).json({ ...user });
  } catch (error) {
   console.log(error)
-   return res.status(error.status).json({ ...error });
+   return res.status(error.status).json({ok: false, status: error.status, message : error.message});
  }
 }
 
@@ -85,7 +87,7 @@ export const ForgottenPasswordController = async (req, res) => {
     return res.status(user.status).json({ ...user });
  } catch (error) {
   console.log(error)
-  return res.status(error.status).json({ ...error });
+  return res.status(error.status).json({ok: false, status: error.status, message : error.message});
  }
 }
 
@@ -98,6 +100,6 @@ export const ResetController = async (req, res) => {
     return res.status(user.status).json({ ...user });
  } catch (error) {
   console.log(error)
-  return res.status(error.status).json({ ...error });
+  return res.status(error.status).json({ok: false, status: error.status, message : error.message});
  }
 }

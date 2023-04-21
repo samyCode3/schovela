@@ -14,8 +14,11 @@ export const sendEmail = async (to, subject, text, html):  Promise<void> => {
   });
    console.log({ ok : true, status: StatusCodes.OK, message: send.messageId})
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw {
+       ok : false,
+       status : StatusCodes.REQUEST_TIMEOUT,
+       message: error.message
+    }
   }
 };
  

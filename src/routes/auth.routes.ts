@@ -10,18 +10,18 @@ import {
    
     } from '../controller/auth'
 import { NotVerifiedUser, VerifiedUser } from '../middleware/auth'
-const api = `/api`
+const api = `/api/auth`;
 
 export const router = async (router: any) => {
     router.get('/', (req, res, next) => {
          return res.send("Happy coding")
     })
-    router.post(`${api}/create`, registerController, (req, res, next) =>{})
-    router.post(`${api}/login`, LoginUserController, (req, res, next) =>{}) 
-    router.post(`${api}/auth/verify`, NotVerifiedUser, VerifyUserAccountController, (req, res, next) =>{}) 
-    router.put(`${api}/auth/resend`, NotVerifiedUser, ResendUserOtp)
-    router.post(`${api}/forgot`, ForgottenPasswordController, (req, res, next) => {})
-    router.put(`${api}/change/password`, ResetController, (req, res, next) => {} )
+    router.post(`${api}/create`, registerController)
+    router.post(`${api}/login`, LoginUserController) 
+    router.post(`${api}/verify`, NotVerifiedUser, VerifyUserAccountController)
+    router.patch(`${api}/resend`, NotVerifiedUser, ResendUserOtp)
+    router.patch(`${api}/forgot`, ForgottenPasswordController)
+    router.post(`${api}/change/password`, ResetController)
 }
 
  

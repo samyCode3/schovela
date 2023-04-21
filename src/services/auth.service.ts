@@ -1,11 +1,12 @@
 import { UserModel } from '../model/user.model'
 import  messages from '../utils/messages'
 import {emailTemplete} from '../templete/email.templete'
-import {token} from '../packages/otp'
+import {OtpGen} from '../packages/otp'
 import {decrypt, encrypt} from  '../helper/encryption'
 import {bearerToken} from '../helper/token'
 import {IRegister, IUserInfo,  IverifyUser, IUser, ILogin, IForgotten, IChangePassword } from '../interface/user.interface';
 import { ApiResponseType } from '../interface/api.interface';
+import {ExcludeField} from '../helper/exclude'
 import {
  StatusCodes
 } from 'http-status-codes'
@@ -22,11 +23,11 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
         }
       }
     } 
-    const otp = token;
-    // console.log(otp)
-    const sendMail = await emailTemplete(payload.email, otp) 
+    const otp = OtpGen(4);
+    console.log(otp)
+    // const sendMail = await emailTemplete(payload.email, otp) 
     const bearerTokens = await bearerToken(payload)
-    const confirmationCode =  await encrypt(otp)
+    const confirmationCode =  await encrypt(otp.toString())
     let user;
     if(findUser){
       user = findUser;
@@ -34,7 +35,9 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
       user.fullname = payload.fullname;
       await user.save();
     }else{
+      
       user = await UserModel.create({confirmationCode, ...payload});
+      
     }
      return {
        ok: true,
@@ -51,11 +54,10 @@ export  const  verifyUser = async (payload:  IverifyUser, user: IUser): Promise<
     const findUser =  await UserModel.findOne({ where: { email: email }})
     const verifyCode =  await decrypt(code, findUser.confirmationCode)
     if( !findUser || !verifyCode) { return { ok: false, status: StatusCodes.BAD_REQUEST,message: messages.INCORRECT_OTP_CODE}}
-  
     const UserPassword = await encrypt(password)
     await UserModel.update({status: true, confirmationCode: '', password : UserPassword}, {where: {email : email}})
    
-    return { ok: true, status: StatusCodes.OK, message : messages.CONTINUE, body :{ user}}
+    return { ok: true, status: StatusCodes.OK, message : messages.CONTINUE}
   
 }
 //Resend Otp 
@@ -65,7 +67,7 @@ export const ResentOtp = async (user: IUser) => {
           if(!findUser || findUser.status != false) {
             throw { ok: false, status: StatusCodes.BAD_REQUEST, message: messages.VERIFIED}
           }
-          const otp = token;
+          const otp = OtpGen(4);
           // console.log(otp)
           const sendMail = await emailTemplete(email, otp) 
           const confirmationCode =  await encrypt(otp)
@@ -90,9 +92,7 @@ export const UserInfo = async (payload: IUserInfo, auth: IUser): Promise<ApiResp
     }
     user.save()
     user = user.dataValues;
-    delete user.password;
-    delete user.resetToken;
-    delete user.confirmationCode;
+    ExcludeField(user, ['password', 'resetToken', 'confirmationCode'])
     return {
     ok: true,
     status: StatusCodes.OK,
@@ -138,7 +138,7 @@ export const forgottenPassword = async (payload: IForgotten): Promise<ApiRespons
        message: messages.USER_NOT_FOUND
     }
   }
-  const otp = await token
+  const otp = OtpGen(4)
   console.log(otp)
   // await emailTemplete(otp, email)
   const resetToken = await encrypt(otp)

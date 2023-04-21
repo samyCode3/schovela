@@ -13,6 +13,7 @@ class User extends Model {
   declare confirmationCode: string;
   declare status : boolean;
   declare resetToken : string
+  declare role: string
 }
 
 User.init(
@@ -52,7 +53,7 @@ User.init(
     },
     faculty: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false, 
       defaultValue: "",
     },
     confirmationCode: {
@@ -69,6 +70,11 @@ User.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "USER", 
+    }
   },
   { sequelize }
 );

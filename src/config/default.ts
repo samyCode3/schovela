@@ -16,7 +16,6 @@ export default {
       PASS: process.env.SMTP_PASSWORD
   },
   token: {
-   BEARER_TOKEN: process.env.BEERER_TOKEN,
-   ACCESS_TOKEN: process.env.ACCESS_TOKEN,
+   BEARER_TOKEN: process.env.BEARER_TOKEN,
   }
-}
+} 

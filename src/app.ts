@@ -5,6 +5,7 @@ import * as cors from 'cors'
 import {sequelize}  from './config/database'
 import {router} from './routes/auth.routes'
 import {UserRouter} from './routes/user.routes'
+import { AdminRoute } from './routes/admin.routes';
 import {
     StatusCodes
    } from 'http-status-codes'
@@ -15,6 +16,7 @@ const connections = async() =>{
     try{
         app.use(express.json())
         app.use(cors())
+        AdminRoute(app)
         router(app)
         UserRouter(app)
         app.all("*", (req, res, next) => {
