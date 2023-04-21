@@ -23,7 +23,7 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
         }
       }
     } 
-    const otp = OtpGen(4);
+    const otp = OtpGen(6);
     try{
       await emailTemplete(payload.email, otp) 
     }catch(error){
@@ -57,11 +57,10 @@ export  const  verifyUser = async (payload:  IverifyUser, user: IUser): Promise<
     const { code, password } = payload
     const findUser =  await UserModel.findOne({ where: { email: email }})
     const verifyCode =  await decrypt(code, findUser.confirmationCode)
-    if( !findUser || !verifyCode) { return { ok: false, status: StatusCodes.BAD_REQUEST,message: messages.INCORRECT_OTP_CODE}}
+    if(!findUser || !verifyCode) { return { ok: false, status: StatusCodes.BAD_REQUEST,message: messages.INCORRECT_OTP_CODE}}
     const UserPassword = await encrypt(password)
     await UserModel.update({status: true, confirmationCode: '', password : UserPassword}, {where: {email : email}})
-   
-    return { ok: true, status: StatusCodes.OK, message : messages.CONTINUE}
+    return { ok: true, status: StatusCodes.OK, message : messages.CONTINUE, body : {}}
   
 }
 //Resend Otp 
@@ -71,7 +70,7 @@ export const ResentOtp = async (user: IUser) => {
           if(!findUser || findUser.status != false) {
             throw { ok: false, status: StatusCodes.BAD_REQUEST, message: messages.VERIFIED}
           }
-          const otp = OtpGen(4);
+          const otp = OtpGen(6);
           // console.log(otp)
           const sendMail = await emailTemplete(email, otp) 
           const confirmationCode =  await encrypt(otp)

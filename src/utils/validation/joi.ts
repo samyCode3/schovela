@@ -32,11 +32,11 @@ export const verifySchema = (payload: IverifyUser): Promise<ApiResponseType> => 
 
 export const UserInfoSchema = (schema: IUserInfo) : Promise<ApiResponseType> => {
   const body = Joi.object({
-      department : Joi.string().required(),
-      level : Joi.number().required(),
-      account_type: Joi.string().required(),
-      faculty: Joi.string().required(),
-      DOB: Joi.string().required()
+      department : Joi.string().optional(),
+      level : Joi.number().optional(),
+      account_type: Joi.string().optional(),
+      faculty: Joi.string().optional(),
+      DOB: Joi.string().optional()
 
   })
   const {error, value} = body.validate(schema, {abortEarly: false})
