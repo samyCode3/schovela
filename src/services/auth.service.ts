@@ -69,7 +69,7 @@ export const ResentOtp = async (user: IUser) => {
           }
           const otp = OtpGen(4);
           // console.log(otp)
-          // const sendMail = await emailTemplete(email, otp) 
+          const sendMail = await emailTemplete(email, otp) 
           const confirmationCode =  await encrypt(otp)
           await UserModel.update({confirmationCode: confirmationCode}, {where: {email : email}})
           return {
