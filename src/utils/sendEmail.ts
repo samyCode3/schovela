@@ -14,7 +14,11 @@ export const sendEmail = async (to, subject, text, html):  Promise<ApiResponseTy
   });
    return { ok : true, status: StatusCodes.OK, message: send.messageId}
   } catch (error) {
-    throw error;
+    throw {
+       ok : false,
+       status : StatusCodes.REQUEST_TIMEOUT,
+       message: error.message
+    }
   }
 };
  

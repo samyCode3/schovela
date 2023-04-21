@@ -15,7 +15,10 @@ export default {
     UNAUTHORIZED: 'User is unauthorized',
     USER_NOT_FOUND: 'User with this email do not exit on our database',
     PASSWORD_IS_CHANGED : 'Password has been changed successfully',
-    VERIFIED: 'Sorry your account is already verified'
+    VERIFIED: 'Sorry your account is already verified',
+    ALREADY_ADMIN: 'This user is already an admin',
+    ELEVELATED_TO_ADMIN: 'This user is now an admin',
+    UNABLE_TO_SEND_EMAIL: 'Unable to send Email'
 
 
 }

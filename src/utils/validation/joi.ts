@@ -70,7 +70,7 @@ export const ForgottenPasswordSchema = (payload: IChangePassword) => {
 
 export const ResetPasswordSchema = (payload: IForgotten) => {
     const body = Joi.object({
-      email : Joi.string().email().required(),
+      email : Joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }).required(),
       code :  Joi.string().required(),
       NewPassword: Joi.string().required().min(8).max(10000000000),
       confirmPassword: Joi.ref("NewPassword")
