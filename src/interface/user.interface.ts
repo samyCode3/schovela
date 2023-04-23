@@ -44,10 +44,7 @@ export interface IChangePassword {
   NewPassword: string
 }
 
-export interface IElevate {
-  id: number
-}
 export enum ROLE {
-   "USER",
-   "ADMIN"
+  user = "user",
+  admin = "admin"
 }

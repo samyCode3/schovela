@@ -8,8 +8,8 @@ import {
      ResetController,
      ResendUserOtp
    
-    } from '../controller/auth'
-import { NotVerifiedUser, VerifiedUser } from '../middleware/auth'
+    } from '../controller/auth.controller'
+import { NotVerifiedUser, RefreshToken } from '../middleware/auth'
 const api = `/api/auth`;
 
 export const router = async (router: any) => {
@@ -19,6 +19,7 @@ export const router = async (router: any) => {
     router.post(`${api}/create`, registerController)
     router.post(`${api}/login`, LoginUserController) 
     router.post(`${api}/verify`, NotVerifiedUser, VerifyUserAccountController)
+    router.post(`${api}/refresh`, NotVerifiedUser, RefreshToken)
     router.patch(`${api}/resend`, NotVerifiedUser, ResendUserOtp)
     router.patch(`${api}/forgot`, ForgottenPasswordController)
     router.post(`${api}/change/password`, ResetController)

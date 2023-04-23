@@ -1,6 +1,6 @@
 import { Model, DataTypes, DATE, Sequelize } from "sequelize";
 import { sequelize } from "../config/database";
-
+import { ROLE } from "../interface/enum/enum";;
 class User extends Model {
   declare fullname : string;
   declare email : string;
@@ -13,7 +13,7 @@ class User extends Model {
   declare confirmationCode: string;
   declare status : boolean;
   declare resetToken : string
-  declare role: string
+  declare role: ROLE
 }
 
 User.init(
@@ -73,7 +73,7 @@ User.init(
     role: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: "USER", 
+      defaultValue: ROLE.user, 
     }
   },
   { sequelize }

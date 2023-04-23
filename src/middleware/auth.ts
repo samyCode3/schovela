@@ -52,15 +52,34 @@ export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => 
 }
 
 
+export const RefreshToken = async(req, res, next) => {
+      try {
+       const user = req.user
+       console.log(user)
+      } catch(err) {
+        const error = new Error(err.message)
+        return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: err.message }) 
+      }
+}
 export const IsAdmin = async (req, res, next) => {
   try {
     const email: string = 'femifatokun@gmail.com'
     const  user = await UserModel.findOne({ where :{ email : email}})
-     if(user.role !== "ADMIN"){
+   if(!user) {
+    throw  {
+      ok: false,
+      status: StatusCodes.UNAUTHORIZED,
+      message: "You are not authorized to perform this request",
+      body : { user }
+      
+    }
+   }
+     if(user.role !== ROLE.admin){
          throw  {
            ok: false,
            status: StatusCodes.FORBIDDEN,
-           message: "User is not allow to perform this action"
+           message: "User is not allow to perform this action",
+           body : { user }
            
          }
      }

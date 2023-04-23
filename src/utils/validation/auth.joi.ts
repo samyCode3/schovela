@@ -36,12 +36,12 @@ export const UserInfoSchema = (schema: IUserInfo) : Promise<ApiResponseType> => 
       level : Joi.number().optional(),
       account_type: Joi.string().optional(),
       faculty: Joi.string().optional(),
-      DOB: Joi.string().optional()
+      dob: Joi.string().optional()
 
   })
   const {error, value} = body.validate(schema, {abortEarly: false})
    if(error) {
-     throw { ok : false, message: error.message};
+     throw { ok : false, status: StatusCodes.BAD_REQUEST, message: error.message};
    }
    return value;
 }
