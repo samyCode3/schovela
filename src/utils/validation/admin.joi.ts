@@ -12,7 +12,7 @@ export const ElevateValidation  = (payload : IElevate): Promise<ApiResponseType>
         throw {
             ok : false,
             status: StatusCodes.BAD_REQUEST,
-            messgage: error.message
+            message: error.message
         }
     }
     return value
