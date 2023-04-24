@@ -1,12 +1,12 @@
 import * as express from 'express'
 import { ElevateUser } from '../services/admin.service'
-
+import { ElevateValidation } from '../utils/validation/admin.joi'
 
 export const ElevateUsers = async (req, res) => {
-    const { params } = req;
+    const { body } = req;
     let payload;
     try {
-      payload = await params;
+      payload = await ElevateValidation(body);
       const registerUser = await ElevateUser(payload);
       return res.json({ ...registerUser })
     } catch (error) {

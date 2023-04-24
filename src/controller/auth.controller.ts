@@ -16,7 +16,7 @@ import {
   ForgottenPasswordSchema,
   ResetPasswordSchema 
 
-} from "../utils/validation/joi";
+} from "../utils/validation/auth.joi";
 import {
   StatusCodes
  } from 'http-status-codes'

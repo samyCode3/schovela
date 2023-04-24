@@ -1,15 +1,13 @@
 import { UserModel } from '../model/user.model'
 import  messages from '../utils/messages'
-import {emailTemplete} from '../templete/email.templete'
+import {emailTemplate} from '../template/email.template'
 import {OtpGen} from '../packages/otp'
 import {decrypt, encrypt} from  '../helper/encryption'
 import {bearerToken} from '../helper/token'
 import {IRegister, IUserInfo,  IverifyUser, IUser, ILogin, IForgotten, IChangePassword } from '../interface/user.interface';
 import { ApiResponseType } from '../interface/api.interface';
 import {ExcludeField} from '../helper/exclude'
-import {
- StatusCodes
-} from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
 
 
 export const registerService  =  async (payload: IRegister): Promise<ApiResponseType> => {
@@ -25,7 +23,7 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
     } 
     const otp = OtpGen(6);
     try{
-      await emailTemplete(payload.email, otp) 
+      await emailTemplate(payload.email, otp) 
     }catch(error){
       console.error(error);
       throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
@@ -41,6 +39,7 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
     }else{
       
       user = await UserModel.create({confirmationCode, ...payload});
+      ExcludeField(user, ['password', 'confirmationCode', 'resetToken'])
       
     }
      return {
@@ -60,7 +59,7 @@ export  const  verifyUser = async (payload:  IverifyUser, user: IUser): Promise<
     if(!findUser || !verifyCode) { return { ok: false, status: StatusCodes.BAD_REQUEST,message: messages.INCORRECT_OTP_CODE}}
     const UserPassword = await encrypt(password)
     await UserModel.update({status: true, confirmationCode: '', password : UserPassword}, {where: {email : email}})
-    return { ok: true, status: StatusCodes.OK, message : messages.CONTINUE, body : {}}
+    return { ok: true, status: StatusCodes.OK, message : messages.CONTINUE, body : {}} 
   
 }
 //Resend Otp 
@@ -71,14 +70,18 @@ export const ResentOtp = async (user: IUser) => {
             throw { ok: false, status: StatusCodes.BAD_REQUEST, message: messages.VERIFIED}
           }
           const otp = OtpGen(6);
-          // console.log(otp)
-          const sendMail = await emailTemplete(email, otp) 
-          const confirmationCode =  await encrypt(otp)
+          try {
+            await emailTemplate(otp, email)
+          } catch (error) {
+            throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
+          }
+          const confirmationCode =  await encrypt(otp.toString())
           await UserModel.update({confirmationCode: confirmationCode}, {where: {email : email}})
           return {
             ok: true,
            status: StatusCodes.OK,
            message: messages.CHECK_FOR_OTP,
+           body : {}
           } 
      }
 
@@ -87,7 +90,7 @@ export const UserInfo = async (payload: IUserInfo, auth: IUser): Promise<ApiResp
     const email = auth.data.email
     let user =  await UserModel.findOne({ where: { email: email }})
     if(!user || user.status != true) {
-      return { ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED_REQUEST}
+      throw { ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED_REQUEST}
     }
     let keys = Object.keys(payload);
     for(let i = 0; i < keys.length; i++){
@@ -112,7 +115,7 @@ export const LoginUser = async (payload:  ILogin) => {
     throw {
       ok : false, 
       status: StatusCodes.BAD_REQUEST,
-      message: messages.INCORRECT_LOGIN_DETAILS
+      message: messages.INCORRECT_LOGIN_DETAILS,
     }
    }
    const comparePassword = await decrypt(password, user.password)
@@ -126,7 +129,8 @@ export const LoginUser = async (payload:  ILogin) => {
    return {
     ok : true,
     status: StatusCodes.OK,
-    message: messages.LOGGEDIN
+    message: messages.LOGGEDIN,
+    body : {}
    }
 }
 //Forget Password
@@ -143,13 +147,18 @@ export const forgottenPassword = async (payload: IForgotten): Promise<ApiRespons
   }
   const otp = OtpGen(4)
   console.log(otp)
-  // await emailTemplete(otp, email)
-  const resetToken = await encrypt(otp)
+  // try {
+  //   await emailTemplate(otp, email)
+  // } catch (error) {
+  //   throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
+  // }
+  const resetToken = await encrypt(otp.toString())
   await UserModel.update({ resetToken }, {where : { email : email}})
   return {
     ok: true,
     status: StatusCodes.OK,
-    message: messages.CHECK_FOR_OTP
+    message: messages.CHECK_FOR_OTP,
+    body : {}
   }
 
 }
@@ -157,9 +166,16 @@ export const forgottenPassword = async (payload: IForgotten): Promise<ApiRespons
 export const ResetPassword  = async (payload: IChangePassword ): Promise<ApiResponseType> => {
    let {email, code, NewPassword} = payload
    const user =  await UserModel.findOne({ where : { email : email}});
+   if(!user) {
+   return {
+      ok: false,
+      status: StatusCodes.FORBIDDEN,
+      message: messages.INCORRECT_OTP_CODE
+    }
+   }
    const decryptCode = await decrypt(code, user.resetToken)
    if(!decryptCode) {
-    throw {
+    return {
       ok: false,
       status: StatusCodes.FORBIDDEN,
       message: messages.INCORRECT_OTP_CODE
@@ -170,7 +186,8 @@ export const ResetPassword  = async (payload: IChangePassword ): Promise<ApiResp
    return {
       ok: true,
       status: StatusCodes.OK,
-      message: messages.PASSWORD_IS_CHANGED 
+      message: messages.PASSWORD_IS_CHANGED,
+      body : {}
    }
    
 }

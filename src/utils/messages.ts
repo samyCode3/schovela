@@ -1,5 +1,3 @@
-
-
 export default {
     DUPLICATE_EMAIL : 'Email is already being used',
     CONNECTION_ERROR : 'Unable to communicate with server',
@@ -19,5 +17,8 @@ export default {
     ALREADY_ADMIN: 'This user is already an admin',
     ELEVELATED_TO_ADMIN: 'This user is now an admin',
     UNABLE_TO_SEND_EMAIL: 'Unable to send Email',
-    FAILED_TO_SEND_EMAIL : "Failed to send verification email please check the email you provided and try again."
+    FAILED_TO_SEND_EMAIL : "Failed to send verification email please check the email you provided and try again.",
+    INTERNAL_SERVER_ERROR: "Something went wrong",
+    ADMIN_ALREADY_EXISTED  : "Admin already existed",
+    ADMIN_IS_CREATED : "ADMIN is Created"
 }
