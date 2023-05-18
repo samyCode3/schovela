@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { UserModel } from '../model/user.model'
-import {verifyTokens} from '../helper/token'
+import {verifyTokens, refreshToken, bearerToken} from '../helper/token'
 import { ApiResponseType } from '../interface/api.interface';
 import { ROLE } from '../interface/user.interface';
 import {
@@ -54,8 +54,21 @@ export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => 
 
 export const RefreshToken = async(req, res, next) => {
       try {
-       const user = req.user
-       console.log(user)
+       const refresh = refreshToken(req.user)
+      if(!refresh) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({ ok: false, status: StatusCodes.UNAUTHORIZED,  messages : 'This user is unauthorized'})
+      }
+      const token = await verifyTokens(refresh, process.env.REFRESH_TOKEN)
+      if(!token) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({ ok: false, status: StatusCodes.UNAUTHORIZED,  messages : 'This user is unauthorized'})
+      }
+      const newRefreshToken = bearerToken(token)
+      if(!newRefreshToken) {
+        return res.status(StatusCodes.FORBIDDEN).json({ ok: false, status: StatusCodes.FORBIDDEN,  messages : 'This user is forbidden'})
+      }
+      req.user = newRefreshToken
+      console.log(req.user)
+      next()
       } catch(err) {
         const error = new Error(err.message)
         return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: err.message }) 

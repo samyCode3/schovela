@@ -3,23 +3,19 @@ import * as express from 'express'
 import config from './config/default';
 import * as cors from 'cors'
 import {sequelize}  from './config/database'
-import {router} from './routes/auth.routes'
-import {UserRouter} from './routes/user.routes'
-import { AdminRoute } from './routes/admin.routes';
 import { seedData } from './model/admin.seed';
 import {
     StatusCodes
    } from 'http-status-codes'
 import './model/index'
+import { IndexRoutes } from './routes';
 const port = config.PORT;
 const app = express()
 const connections = async() =>{
     try{
         app.use(express.json())
         app.use(cors())
-        AdminRoute(app)
-        router(app)
-        UserRouter(app)
+        app.use('/api', IndexRoutes)
         app.all("*", (req, res, next) => {
             return res.status(StatusCodes.NOT_FOUND).json({ ok: false, message: 'Route not found', body : `${req.method} - ${req.ip} - ${req.url}`})
         })
@@ -31,10 +27,7 @@ const connections = async() =>{
             throw err;
         });
     } catch(err) {
-        console.error(`Error : ${err}, Trying again in 5 seconds...`);
-        setTimeout(()=>{
-            connections();
-        }, 5000);
+        console.error(`Error : ${err}, Can't connect to database...`);
     }
 }
 connections()
