@@ -1,4 +1,4 @@
-import * as express from 'express'
+import {Router} from 'express'
 import {
      registerController,
      VerifyUserAccountController, 
@@ -10,19 +10,18 @@ import {
    
     } from '../controller/auth.controller'
 import { NotVerifiedUser, RefreshToken } from '../middleware/auth'
-const api = `/api/auth`;
+export const authRoutes = Router()
 
-export const router = async (router: any) => {
-    router.get('/', (req, res, next) => {
+    authRoutes.get('/', (req, res, next) => {
          return res.send("Happy coding")
     })
-    router.post(`${api}/create`, registerController)
-    router.post(`${api}/login`, LoginUserController) 
-    router.post(`${api}/verify`, NotVerifiedUser, VerifyUserAccountController)
-    router.post(`${api}/refresh`, NotVerifiedUser, RefreshToken)
-    router.patch(`${api}/resend`, NotVerifiedUser, ResendUserOtp)
-    router.patch(`${api}/forgot`, ForgottenPasswordController)
-    router.post(`${api}/change/password`, ResetController)
-}
+    authRoutes.post(`/create`, registerController)
+    authRoutes.post(`/login`, LoginUserController) 
+    authRoutes.post(`/verify`, NotVerifiedUser, VerifyUserAccountController)
+    authRoutes.post(`/refresh`, NotVerifiedUser, RefreshToken)
+    authRoutes.patch(`/resend`, NotVerifiedUser, ResendUserOtp)
+    authRoutes.patch(`/forgot`, ForgottenPasswordController)
+    authRoutes.post(`/change/password`, ResetController)
+
 
  

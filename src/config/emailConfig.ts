@@ -2,8 +2,6 @@ import config from './default';
 // import * as config from 'config';
 import { createTransport } from 'nodemailer';
 
-console.log(config.mailgun);
-
 export const mail = createTransport({
     host: config.mailgun.HOST,
     port: Number(config.mailgun.PORT),
