@@ -39,7 +39,7 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
     }else{
       
       user = await UserModel.create({confirmationCode, ...payload});
-      ExcludeField(user, ['password', 'confirmationCode', 'resetToken'])
+      user = ExcludeField(user.dataValues, ['password', 'confirmationCode', 'resetToken'])
       
     }
      return {
@@ -128,8 +128,8 @@ export const LoginUser = async (payload:  ILogin) => {
    }
    
    const bearerTokens = await bearerToken({ fullname : user.fullname, email })
-   let resUser = ExcludeField(user, ['password', 'confirmationCode', 'resetToken']);
-
+   let resUser = ExcludeField(user.dataValues, ['password', 'confirmationCode', 'resetToken']);
+   
    return {
     ok : true,
     status: StatusCodes.OK,
