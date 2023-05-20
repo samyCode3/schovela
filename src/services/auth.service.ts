@@ -126,11 +126,15 @@ export const LoginUser = async (payload:  ILogin) => {
       message: messages.INCORRECT_LOGIN_DETAILS,
     }
    }
+   
+   const bearerTokens = await bearerToken({ fullname : user.fullname, email })
+   let resUser = ExcludeField(user, ['password', 'confirmationCode', 'resetToken']);
+
    return {
     ok : true,
     status: StatusCodes.OK,
     message: messages.LOGGEDIN,
-    body : {}
+    body : { user : resUser, bearerTokens }
    }
 }
 //Forget Password
