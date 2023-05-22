@@ -10,6 +10,7 @@ class User extends Model {
   declare account_type : string;
   declare dob : string;
   declare faculty: string;
+  declare phone: string;
   declare confirmationCode: string;
   declare status : boolean;
   declare resetToken : string
@@ -25,6 +26,11 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
     },
     password: {
       type: DataTypes.STRING,

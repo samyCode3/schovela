@@ -34,6 +34,7 @@ export const UserInfoSchema = (schema: IUserInfo) : Promise<ApiResponseType> => 
   const body = Joi.object({
       department : Joi.string().optional(),
       level : Joi.number().optional(),
+      phone : Joi.string().optional(),
       account_type: Joi.string().optional(),
       faculty: Joi.string().optional(),
       dob: Joi.string().optional()

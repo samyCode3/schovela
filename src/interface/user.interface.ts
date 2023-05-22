@@ -14,6 +14,7 @@ export interface IUserInfo {
   department: string,
   level: string,
   account_type: string,
+  phone: string,
   DOB: string,
   faculty:  string
 
