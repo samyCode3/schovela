@@ -71,7 +71,7 @@ export const ResentOtp = async (user: IUser) => {
           }
           const otp = OtpGen(6);
           try {
-            await emailTemplate(otp, email)
+            await emailTemplate(email, otp)
           } catch (error) {
             throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
           }
