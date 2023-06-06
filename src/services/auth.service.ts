@@ -150,12 +150,12 @@ export const forgottenPassword = async (payload: IForgotten): Promise<ApiRespons
     }
   }
   const otp = OtpGen(4)
-  console.log(otp)
-  // try {
-  //   await emailTemplate(otp, email)
-  // } catch (error) {
-  //   throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
-  // }
+  
+  try {
+    await emailTemplate(otp, email)
+  } catch (error) {
+    throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
+  }
   const resetToken = await encrypt(otp.toString())
   await UserModel.update({ resetToken }, {where : { email : email}})
   return {
