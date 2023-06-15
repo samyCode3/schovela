@@ -16,9 +16,13 @@ export default {
     VERIFIED: 'Sorry your account is already verified',
     ALREADY_ADMIN: 'This user is already an admin',
     ELEVELATED_TO_ADMIN: 'This user is now an admin',
+    ELEVELATED_TO_MODERATOR: 'This user is now a moderator',
+    DE_ELEVELATED_TO_USER: 'This user is now a user',
     UNABLE_TO_SEND_EMAIL: 'Unable to send Email',
     FAILED_TO_SEND_EMAIL : "Failed to send verification email please check the email you provided and try again.",
     INTERNAL_SERVER_ERROR: "Something went wrong",
     ADMIN_ALREADY_EXISTED  : "Admin already existed",
-    ADMIN_IS_CREATED : "ADMIN is Created"
+    ADMIN_IS_CREATED : "ADMIN is Created",
+    USER_RECORD : "Record was retrived",
+    NO_USERS_FOUND : "No user yet in the database"
 }

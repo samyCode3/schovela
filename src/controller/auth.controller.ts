@@ -7,7 +7,7 @@ import {
   LoginUser,
   forgottenPassword,
   ResetPassword
-} from "../services/auth.service"
+} from "../services/auth/auth.service"
 import {
   registerSchema,
   verifySchema,

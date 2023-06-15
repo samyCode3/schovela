@@ -2,9 +2,9 @@ import {Router} from 'express'
 import {
      UserInfosController,   
     } from '../controller/auth.controller'
-import { NotVerifiedUser, VerifiedUser } from '../middleware/auth'
+import {AuthUser, VerifiedUser } from '../middleware/auth'
    export  const userRoutes = Router()
-    userRoutes.use(NotVerifiedUser)
+    userRoutes.use(AuthUser)
     userRoutes.post(`/data`, VerifiedUser, UserInfosController) 
    
 
