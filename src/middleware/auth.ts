@@ -8,7 +8,7 @@ import {
    } from 'http-status-codes'
 import messages from '../utils/messages';
 
-export const NotVerifiedUser = async (req, res, next): Promise<ApiResponseType> => {
+export const AuthUser = async (req, res, next): Promise<ApiResponseType> => {
    try {
       const authHeader = req.headers.authorization
       if (!authHeader) {
@@ -36,7 +36,7 @@ export const NotVerifiedUser = async (req, res, next): Promise<ApiResponseType> 
 }
 export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => {
   try {
-      const email = req.user.data.email
+      const {email} = req.user.data
       const user = await UserModel.findOne({ where: { email : email}})
       if(user.status !== true) {
         return {
@@ -76,14 +76,14 @@ export const RefreshToken = async(req, res, next) => {
 }
 export const IsAdmin = async (req, res, next) => {
   try {
-    const email: string = 'femifatokun@gmail.com'
-    const  user = await UserModel.findOne({ where :{ email : email}})
+    const {email} = req.user.data
+    console.log(email)
+    const  user = await UserModel.findOne({ where :{email}})
    if(!user) {
     throw  {
       ok: false,
       status: StatusCodes.UNAUTHORIZED,
-      message: "You are not authorized to perform this request",
-      body : { user }
+      message: "You are not authorized to perform this request"
       
     }
    }
@@ -103,4 +103,25 @@ export const IsAdmin = async (req, res, next) => {
     return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: err.message }) 
   } 
  
+}
+
+export const IsUser = async (req, res, next) => {
+  try {
+     const {email} = req.user.data
+     console.log(req.user)
+     const user = await UserModel.findOne({ where :  {email}})
+     if(user.role != ROLE.user) {
+      throw  {
+        ok: false,
+        status: StatusCodes.FORBIDDEN,
+        message: "You are not authorized to perform this request"
+        
+      }
+     }
+     req.user = user
+     next()
+  } catch (err) {
+    const error = new Error(err.message)
+    return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: err.message }) 
+  } 
 }

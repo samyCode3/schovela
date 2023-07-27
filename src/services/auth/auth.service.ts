@@ -1,12 +1,12 @@
-import { UserModel } from '../model/user.model'
-import  messages from '../utils/messages'
-import {emailTemplate} from '../template/email.template'
-import {OtpGen} from '../packages/otp'
-import {decrypt, encrypt} from  '../helper/encryption'
-import {bearerToken} from '../helper/token'
-import {IRegister, IUserInfo,  IverifyUser, IUser, ILogin, IForgotten, IChangePassword } from '../interface/user.interface';
-import { ApiResponseType } from '../interface/api.interface';
-import {ExcludeField} from '../helper/exclude'
+import { UserModel } from '../../model/user.model'
+import  messages from '../../utils/messages'
+import {emailTemplate} from '../../template/email.template'
+import {OtpGen} from '../../packages/otp'
+import {decrypt, encrypt} from  '../../helper/encryption'
+import {bearerToken} from '../../helper/token'
+import {IRegister, IUserInfo,  IverifyUser, IUser, ILogin, IForgotten, IChangePassword } from '../../interface/user.interface';
+import { ApiResponseType } from '../../interface/api.interface';
+import {ExcludeField} from '../../helper/exclude'
 import { StatusCodes } from 'http-status-codes'
 
 
