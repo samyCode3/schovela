@@ -9,5 +9,5 @@ export const IndexRoutes = Router()
 
 IndexRoutes.use('/auth', authRoutes)
 IndexRoutes.use('/admin', adminRouter)
-IndexRoutes.use('/user', userRoutes)
-IndexRoutes.use(ErrorMiddleware)
+IndexRoutes.use('/user', userRoutes)  
+IndexRoutes.use(ErrorMiddleware) 

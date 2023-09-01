@@ -8,14 +8,14 @@ import {
     StatusCodes
    } from 'http-status-codes'
 import './model/index'
-import { IndexRoutes } from './routes';
-const port = config.PORT;
+import { IndexRoutes } from './routes'; 
+const port = config.PORT;  
 const app = express()
-const connections = async() =>{
+const connections = async() =>{ 
     try{
         app.use(express.json())
         app.use(cors())
-        app.use('/api', IndexRoutes)
+        app.use('/api', IndexRoutes)  
         app.all("*", (req, res, next) => {
             return res.status(StatusCodes.NOT_FOUND).json({ ok: false, message: 'Route not found', body : `${req.method} - ${req.ip} - ${req.url}`})
         })
@@ -26,7 +26,7 @@ const connections = async() =>{
         }).catch((err)=>{
             throw err;
         });
-    } catch(err) {
+    } catch(err) { 
         console.error(`Error : ${err}, Can't connect to database...`);
     }
 }
