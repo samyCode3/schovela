@@ -15,11 +15,14 @@ const connections = async() =>{
     try{
         app.use(express.json())
         app.use(cors())
+        app.get('/', (req, res) => {
+            return res.send("Hello Schovela")
+        })
         app.use('/api', IndexRoutes)  
         app.all("*", (req, res, next) => {
             return res.status(StatusCodes.NOT_FOUND).json({ ok: false, message: 'Route not found', body : `${req.method} - ${req.ip} - ${req.url}`})
         })
-       await sequelize.sync({ alter : true }).then(async ()=>{
+       sequelize.sync({ alter : true }).then(async ()=>{
             console.log('Database connected successfully.');
             await seedData()
         app.listen(port, () => console.log(`App running on port http://localhost:${port}`))
