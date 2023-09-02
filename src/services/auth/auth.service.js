@@ -10,13 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ResetPassword = exports.forgottenPassword = exports.LoginUser = exports.UserInfo = exports.ResentOtp = exports.verifyUser = exports.registerService = void 0;
-const user_model_1 = require("../model/user.model");
-const messages_1 = require("../utils/messages");
-const email_template_1 = require("../template/email.template");
-const otp_1 = require("../packages/otp");
-const encryption_1 = require("../helper/encryption");
-const token_1 = require("../helper/token");
-const exclude_1 = require("../helper/exclude");
+const user_model_1 = require("../../model/user.model");
+const messages_1 = require("../../utils/messages");
+const email_template_1 = require("../../template/email.template");
+const otp_1 = require("../../packages/otp");
+const encryption_1 = require("../../helper/encryption");
+const token_1 = require("../../helper/token");
+const exclude_1 = require("../../helper/exclude");
 const http_status_codes_1 = require("http-status-codes");
 const registerService = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const findUser = yield user_model_1.UserModel.findOne({ where: { email: payload.email } });
@@ -48,7 +48,7 @@ const registerService = (payload) => __awaiter(void 0, void 0, void 0, function*
     }
     else {
         user = yield user_model_1.UserModel.create(Object.assign({ confirmationCode }, payload));
-        (0, exclude_1.ExcludeField)(user, ['password', 'confirmationCode', 'resetToken']);
+        user = (0, exclude_1.ExcludeField)(user.dataValues, ['password', 'confirmationCode', 'resetToken']);
     }
     return {
         ok: true,
@@ -81,7 +81,7 @@ const ResentOtp = (user) => __awaiter(void 0, void 0, void 0, function* () {
     }
     const otp = (0, otp_1.OtpGen)(6);
     try {
-        yield (0, email_template_1.emailTemplate)(otp, email);
+        yield (0, email_template_1.emailTemplate)(email, otp);
     }
     catch (error) {
         throw { ok: false, message: messages_1.default.FAILED_TO_SEND_EMAIL, status: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR };
@@ -137,11 +137,13 @@ const LoginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
             message: messages_1.default.INCORRECT_LOGIN_DETAILS,
         };
     }
+    const bearerTokens = yield (0, token_1.bearerToken)({ fullname: user.fullname, email });
+    let resUser = (0, exclude_1.ExcludeField)(user.dataValues, ['password', 'confirmationCode', 'resetToken']);
     return {
         ok: true,
         status: http_status_codes_1.StatusCodes.OK,
         message: messages_1.default.LOGGEDIN,
-        body: {}
+        body: { user: resUser, bearerTokens }
     };
 });
 exports.LoginUser = LoginUser;
@@ -157,12 +159,12 @@ const forgottenPassword = (payload) => __awaiter(void 0, void 0, void 0, functio
         };
     }
     const otp = (0, otp_1.OtpGen)(4);
-    console.log(otp);
-    // try {
-    //   await emailTemplate(otp, email)
-    // } catch (error) {
-    //   throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
-    // }
+    try {
+        yield (0, email_template_1.emailTemplate)(otp, email);
+    }
+    catch (error) {
+        throw { ok: false, message: messages_1.default.FAILED_TO_SEND_EMAIL, status: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR };
+    }
     const resetToken = yield (0, encryption_1.encrypt)(otp.toString());
     yield user_model_1.UserModel.update({ resetToken }, { where: { email: email } });
     return {

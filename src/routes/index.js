@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.IndexRoutes = void 0;
+const express_1 = require("express");
+const auth_routes_1 = require("./auth.routes");
+const admin_routes_1 = require("./admin.routes");
+const user_routes_1 = require("./user.routes");
+const error_1 = require("../middleware/error/error");
+exports.IndexRoutes = (0, express_1.Router)();
+exports.IndexRoutes.use('/auth', auth_routes_1.authRoutes);
+exports.IndexRoutes.use('/admin', admin_routes_1.adminRouter);
+exports.IndexRoutes.use('/user', user_routes_1.userRoutes);
+exports.IndexRoutes.use(error_1.ErrorMiddleware);

@@ -14,25 +14,24 @@ const express = require("express");
 const default_1 = require("./config/default");
 const cors = require("cors");
 const database_1 = require("./config/database");
-const auth_routes_1 = require("./routes/auth.routes");
-const user_routes_1 = require("./routes/user.routes");
-const admin_routes_1 = require("./routes/admin.routes");
 const admin_seed_1 = require("./model/admin.seed");
 const http_status_codes_1 = require("http-status-codes");
 require("./model/index");
+const routes_1 = require("./routes");
 const port = default_1.default.PORT;
 const app = express();
 const connections = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         app.use(express.json());
         app.use(cors());
-        (0, admin_routes_1.AdminRoute)(app);
-        (0, auth_routes_1.router)(app);
-        (0, user_routes_1.UserRouter)(app);
+        app.get('/', (req, res) => {
+            return res.send("Hello Schovela");
+        });
+        app.use('/api', routes_1.IndexRoutes);
         app.all("*", (req, res, next) => {
             return res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({ ok: false, message: 'Route not found', body: `${req.method} - ${req.ip} - ${req.url}` });
         });
-        yield database_1.sequelize.sync({ alter: true }).then(() => __awaiter(void 0, void 0, void 0, function* () {
+        database_1.sequelize.sync({ alter: true }).then(() => __awaiter(void 0, void 0, void 0, function* () {
             console.log('Database connected successfully.');
             yield (0, admin_seed_1.seedData)();
             app.listen(port, () => console.log(`App running on port http://localhost:${port}`));
@@ -41,10 +40,7 @@ const connections = () => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (err) {
-        console.error(`Error : ${err}, Trying again in 5 seconds...`);
-        setTimeout(() => {
-            connections();
-        }, 5000);
+        console.error(`Error : ${err}, Can't connect to database...`);
     }
 });
 connections();
