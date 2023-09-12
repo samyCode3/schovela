@@ -2,7 +2,7 @@ import { mail } from "../config/emailConfig";
 export const sendEmail = async (to, subject, text, html):  Promise<void> => {
   try {
   const send = await mail.sendMail({
-    from: `${process.env.SMTP_NAME}\n ${process.env.SMTP_EMAIL}`,
+    from: `"${process.env.SMTP_NAME}" <${process.env.SMTP_EMAIL}>`,
     to,
     subject,
     text,

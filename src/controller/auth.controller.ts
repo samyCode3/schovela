@@ -28,6 +28,7 @@ export const registerController = async (req, res) => {
     const registerUser = await registerService(payload);
     return res.status(registerUser.status).json({ ...registerUser });
   } catch (error) {
+    console.log(error);
     return res.status(error.status).json({ok: false, status: error.status, message : error.message});
   }
 };
