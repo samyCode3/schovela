@@ -10,5 +10,6 @@ export interface IElevate {
   }
 
 export interface FilterUsersType{
-  role?: ROLE
+  role?: ROLE,
+  page?: number
 }

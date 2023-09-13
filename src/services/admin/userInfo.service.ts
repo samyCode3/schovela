@@ -24,7 +24,9 @@ export const get_all_user = async (payload : FilterUsersType) => {
       where.role = payload.role
    }
 
-    const users = await UserModel.findAll({ where });
+   const attributes = ['id', 'fullname', 'createdAt', 'email'];
+
+   const users = await UserModel.findAll({ attributes, where, order : [['id', 'DESC']], offset : payload.page, limit : 20 });
     
    return {
     ok : true,

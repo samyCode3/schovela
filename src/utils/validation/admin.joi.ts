@@ -21,7 +21,8 @@ export const ElevateValidation  = (payload : IElevate): Promise<ApiResponseType>
 
 export const filterUsersValidation = (body : any): FilterUsersType =>{
     const schema = Joi.object({
-        role : Joi.any().valid(...Object.values(ROLE)).optional()
+        role : Joi.any().valid(...Object.values(ROLE)).optional(),
+        page : Joi.number().optional().default(0)
     });
 
     const {error, value} = schema.validate(body, { abortEarly : false})
