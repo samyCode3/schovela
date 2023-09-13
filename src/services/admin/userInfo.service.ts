@@ -24,13 +24,13 @@ export const get_all_user = async (payload : FilterUsersType) => {
       where.role = payload.role
    }
 
-    const user = await UserModel.findAll({ where });
+    const users = await UserModel.findAll({ where });
     
    return {
     ok : true,
     status: StatusCodes.OK,
     message  : messages.USER_RECORD,
-    body : {user}
+    body : {users}
    }
 }
 export const getByFilter = async (payload: Ifilter) => {
