@@ -6,7 +6,7 @@ import { FilterUsersType, IElevate, Ifilter } from "../../interface/admin.interf
 
 
 export const total_number_of_user = async () => {
-    const total_user = await UserModel.count()
+    const total_user = await UserModel.count({ where : { status : {  [Op.not] : false } } });
     return {
         ok : true,
         status: StatusCodes.OK,
