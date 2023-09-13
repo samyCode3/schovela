@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes"
 import {Op} from 'sequelize'
 import { UserModel } from "../../model/user.model"
 import messages from "../../utils/messages"
-import { IElevate, Ifilter } from "../../interface/admin.interface"
+import { FilterUsersType, IElevate, Ifilter } from "../../interface/admin.interface"
 
 
 export const total_number_of_user = async () => {
@@ -15,18 +15,17 @@ export const total_number_of_user = async () => {
     }
 }
 
-export const get_all_user = async () => {
-    const user = await UserModel.findAll({ where : {
-         status : {  [Op.not] : false },
-         role : { [Op.ne] : 'admin'}
-    }})
-    if(user.length === 0) {
-       throw {
-         ok : true,
-         status :  StatusCodes.NOT_FOUND,
-         message : messages.NO_USERS_FOUND
-       }
-    }
+export const get_all_user = async (payload : FilterUsersType) => {
+   let where : any = {
+      status : {  [Op.not] : false }
+   };
+
+   if(payload.role){
+      where.role = payload.role
+   }
+
+    const user = await UserModel.findAll({ where });
+    
    return {
     ok : true,
     status: StatusCodes.OK,

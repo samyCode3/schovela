@@ -12,7 +12,7 @@ adminRouter.post(`/moderator`, ElevateToModeratorController)
 adminRouter.post(`/de_elevate`, De_elevateModeratorController)
 adminRouter.get(`/total/users`, getTotalUserController)            
 adminRouter.get(`/users`, getUserController)
-adminRouter.get(`/filter/:role`, getUserByFilterController)
+// adminRouter.get(`/filter/:role`, getUserByFilterController)
 adminRouter.get(`/user/:id`, getUserByIdController)
 
 
