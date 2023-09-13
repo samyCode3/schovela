@@ -26,7 +26,7 @@ export const get_all_user = async (payload : FilterUsersType) => {
 
    const attributes = ['id', 'fullname', 'createdAt', 'email'];
 
-   const users = await UserModel.findAll({ attributes, where, order : [['id', 'DESC']], offset : payload.page, limit : 2 });
+   const users = await UserModel.findAll({ attributes, where, order : [['id', 'DESC']], offset : payload.page, limit : 20 });
     
    return {
     ok : true,
