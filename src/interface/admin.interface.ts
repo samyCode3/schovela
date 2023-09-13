@@ -1,4 +1,4 @@
-import { ROLE } from "./user.interface"
+import { ROLE } from "./enum/enum";
 
 export interface IElevate {
     id: number
