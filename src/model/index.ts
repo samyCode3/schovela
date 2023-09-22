@@ -1,5 +1,2 @@
-import {UserModel} from './user.model'
-export const Model = () => {
-    UserModel
-}
-Model()
+export {UserModel} from './user.model'
+export {ProfileModel} from './profile.model'

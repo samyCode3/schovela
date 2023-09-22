@@ -1,7 +1,7 @@
 // import * as config from 'config';
 import config from './default';
 import * as pg from 'pg'
-import {Sequelize} from 'sequelize'
+import {Sequelize} from 'sequelize' 
 // console.log(config);
 // const host = config.get<string>('DATABASE.HOST')
 // const user = config.get<string>('DATABASE.USER')
@@ -17,7 +17,6 @@ import {Sequelize} from 'sequelize'
 //     database : database,
 //     port : port
 // })
-
 
 export const sequelize = new Sequelize({
     dialect : 'postgres',

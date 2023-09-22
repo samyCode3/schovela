@@ -7,13 +7,15 @@ import { seedData } from './model/admin.seed';
 import {
     StatusCodes
    } from 'http-status-codes'
-import './model/index'
+import './model/init.models'
 import { IndexRoutes } from './routes'; 
 const port = config.PORT;  
 const app = express()
+
 const connections = async() =>{ 
     try{
         app.use(express.json())
+        app.use(express.urlencoded({ extended: true }))
         app.use(cors())
         app.get('/', (req, res) => {
             return res.send("Hello Schovela")

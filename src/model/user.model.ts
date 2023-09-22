@@ -2,6 +2,7 @@ import { Model, DataTypes, DATE, Sequelize } from "sequelize";
 import { sequelize } from "../config/database";
 import { ROLE } from "../interface/enum/enum";;
 class User extends Model {
+  declare id :  number;
   declare fullname : string;
   declare email : string;
   declare password : string;
