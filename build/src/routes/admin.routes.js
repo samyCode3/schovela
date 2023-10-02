@@ -1,10 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AdminRoute = void 0;
+exports.adminRouter = void 0;
+const express_1 = require("express");
 const auth_1 = require("../middleware/auth");
-const admin_controller_1 = require("../controller/admin.controller");
-const api = `/api/admin`;
-const AdminRoute = (router) => {
-    router.post(`${api}/elevate`, auth_1.IsAdmin, admin_controller_1.ElevateUsers);
-};
-exports.AdminRoute = AdminRoute;
+const admin_controller_1 = require("../controller/admin/admin.controller");
+const userInfo_controller_1 = require("../controller/admin/userInfo.controller;");
+exports.adminRouter = (0, express_1.Router)();
+exports.adminRouter.use(auth_1.AuthUser);
+exports.adminRouter.use(auth_1.IsAdmin);
+exports.adminRouter.post(`/elevate`, admin_controller_1.ElevateUsers);
+exports.adminRouter.post(`/moderator`, admin_controller_1.ElevateToModeratorController);
+exports.adminRouter.post(`/de_elevate`, admin_controller_1.De_elevateModeratorController);
+exports.adminRouter.get(`/total/users`, userInfo_controller_1.getTotalUserController);
+exports.adminRouter.get(`/users`, userInfo_controller_1.getUserController);
+exports.adminRouter.get(`/filter/:role`, userInfo_controller_1.getUserByFilterController);
+exports.adminRouter.get(`/user/:id`, userInfo_controller_1.getUserByIdController);

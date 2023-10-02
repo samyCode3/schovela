@@ -1,20 +1,21 @@
-import { Model, DataTypes, DATE, Sequelize } from "sequelize";
+import { Model, DataTypes, DATE, Sequelize, UUIDV4 } from "sequelize";
 import { sequelize } from "../config/database";
 import { ROLE } from "../interface/enum/enum";;
 class User extends Model {
-  declare fullname : string;
-  declare email : string;
-  declare password : string;
-  declare department: string;
-  declare level : string;
-  declare account_type : string;
-  declare dob : string;
-  declare faculty: string;
-  declare phone: string;
-  declare confirmationCode: string;
-  declare status : boolean;
-  declare resetToken : string
-  declare role: ROLE
+   id!: number;
+   fullname : string;
+   email : string;
+   password : string;
+   department: string;
+   level : string;
+   account_type : string;
+   dob : string;
+   faculty: string;
+   phone: string;
+   confirmationCode: string;
+   status : boolean;
+   resetToken : string
+   role: ROLE
 }
 
 User.init(

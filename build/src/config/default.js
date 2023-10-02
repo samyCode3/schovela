@@ -19,5 +19,6 @@ exports.default = {
     },
     token: {
         BEARER_TOKEN: process.env.BEARER_TOKEN,
+        REFRESH_TOKEN: process.env.REFRESH_TOKEN
     }
 };

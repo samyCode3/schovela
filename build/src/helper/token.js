@@ -9,14 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyTokens = exports.bearerToken = void 0;
+exports.verifyTokens = exports.refreshToken = exports.bearerToken = void 0;
 const jwt = require("jsonwebtoken");
 const default_1 = require("../config/default");
 const bearer = default_1.default.token.BEARER_TOKEN;
+const refresh = default_1.default.token.REFRESH_TOKEN;
 const bearerToken = (data) => {
     return jwt.sign({ data }, bearer);
 };
 exports.bearerToken = bearerToken;
+const refreshToken = (data) => {
+    return jwt.sign({ data }, refresh);
+};
+exports.refreshToken = refreshToken;
 const verifyTokens = (payload, Tokens) => __awaiter(void 0, void 0, void 0, function* () {
     return yield jwt.verify(payload, Tokens);
 });

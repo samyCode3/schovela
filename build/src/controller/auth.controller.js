@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ResetController = exports.ForgottenPasswordController = exports.UserInfosController = exports.LoginUserController = exports.ResendUserOtp = exports.VerifyUserAccountController = exports.registerController = void 0;
-const auth_service_1 = require("../services/auth.service");
+const auth_service_1 = require("../services/auth/auth.service");
 const auth_joi_1 = require("../utils/validation/auth.joi");
 const registerController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;

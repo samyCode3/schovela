@@ -1,5 +1,5 @@
-import {UserModel} from './user.model'
+import * as db_models from './init.model'
 export const Model = () => {
-    UserModel
+   db_models
 }
 Model()

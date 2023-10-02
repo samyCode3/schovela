@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ElevateUser = void 0;
-const user_model_1 = require("../model/user.model");
-const enum_1 = require("../interface/enum/enum");
+exports.De_elevateModerator = exports.ElevateUserToModerator = exports.ElevateUser = void 0;
+const user_model_1 = require("../../model/user.model");
+const enum_1 = require("../../interface/enum/enum");
 const http_status_codes_1 = require("http-status-codes");
-const messages_1 = require("../utils/messages");
+const messages_1 = require("../../utils/messages");
 const ElevateUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const id = payload.id;
     let user = yield user_model_1.UserModel.findOne({ where: { id: id } });
@@ -40,3 +40,41 @@ const ElevateUser = (payload) => __awaiter(void 0, void 0, void 0, function* () 
     };
 });
 exports.ElevateUser = ElevateUser;
+const ElevateUserToModerator = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = payload;
+    const user = yield user_model_1.UserModel.findOne({ where: { id } });
+    if (!user) {
+        throw {
+            ok: false,
+            status: http_status_codes_1.StatusCodes.NOT_FOUND,
+            message: messages_1.default.USER_NOT_FOUND
+        };
+    }
+    yield user_model_1.UserModel.update({ role: enum_1.ROLE.moderator }, { where: { id } });
+    return {
+        ok: true,
+        status: http_status_codes_1.StatusCodes.OK,
+        message: messages_1.default.ELEVELATED_TO_MODERATOR,
+        body: {}
+    };
+});
+exports.ElevateUserToModerator = ElevateUserToModerator;
+const De_elevateModerator = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = payload;
+    const user = yield user_model_1.UserModel.findOne({ where: { id } });
+    if (!user) {
+        throw {
+            ok: false,
+            status: http_status_codes_1.StatusCodes.NOT_FOUND,
+            message: messages_1.default.USER_NOT_FOUND
+        };
+    }
+    yield user_model_1.UserModel.update({ role: enum_1.ROLE.user }, { where: { id } });
+    return {
+        ok: true,
+        status: http_status_codes_1.StatusCodes.OK,
+        message: messages_1.default.DE_ELEVELATED_TO_USER,
+        body: {}
+    };
+});
+exports.De_elevateModerator = De_elevateModerator;

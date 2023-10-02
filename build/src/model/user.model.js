@@ -16,6 +16,11 @@ User.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
+    phone: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "",
+    },
     password: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,

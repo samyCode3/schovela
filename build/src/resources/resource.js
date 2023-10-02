@@ -9,19 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ElevateUsers = void 0;
-const admin_service_1 = require("../services/admin.service");
-const admin_joi_1 = require("../utils/validation/admin.joi");
-const ElevateUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { body } = req;
-    let payload;
-    try {
-        payload = yield (0, admin_joi_1.ElevateValidation)(body);
-        const registerUser = yield (0, admin_service_1.ElevateUser)(payload);
-        return res.json(Object.assign({}, registerUser));
-    }
-    catch (error) {
-        return res.status(error.status).json({ ok: false, status: error.status, message: error.message });
-    }
-});
-exports.ElevateUsers = ElevateUsers;
+exports.default = {
+    create: (payload, model) => __awaiter(void 0, void 0, void 0, function* () {
+        const resource = yield model.create(Object.assign({}, payload));
+        return resource;
+    }),
+    getByUserId: (userId, model) => __awaiter(void 0, void 0, void 0, function* () {
+        const resources = yield model.findOne({ where: { userId } });
+        return resources;
+    }),
+    deleteById: (payload, model) => __awaiter(void 0, void 0, void 0, function* () {
+        let where = {
+            payload
+        };
+        const resource = yield model.findOne(where);
+    })
+};
