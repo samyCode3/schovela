@@ -23,12 +23,12 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
     } 
     const otp = OtpGen(6);
     console.log(otp)
-    // try{
-    //   await emailTemplate(payload.email, otp) 
-    // }catch(error){
-    //   console.error(error);
-    //   throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
-    // }
+    try{
+      await emailTemplate(payload.email, otp) 
+    }catch(error){
+      console.error(error);
+      throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
+    }
     const bearerTokens = await bearerToken(payload)
     const confirmationCode =  await encrypt(otp.toString())
     let user;
@@ -47,7 +47,7 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
        ok: true,
        message: messages.CREATED,
        status: StatusCodes.CREATED,
-       body: {user, bearerTokens} 
+       body: {user, bearerTokens, otp} 
      }
    } 
 

@@ -24,9 +24,6 @@ const connections = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         app.use(express.json());
         app.use(cors());
-        app.get('/', (req, res) => {
-            return res.send("Hello Schovela");
-        });
         app.use('/api', routes_1.IndexRoutes);
         app.all("*", (req, res, next) => {
             return res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({ ok: false, message: 'Route not found', body: `${req.method} - ${req.ip} - ${req.url}` });

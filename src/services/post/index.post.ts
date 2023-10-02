@@ -1,0 +1,1 @@
+export {createPostService, getPostService} from './post.service'

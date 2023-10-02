@@ -3,20 +3,25 @@ import { sequelize } from "../config/database";
 import { ROLE } from "../interface/enum/enum";
 ;
 class Post extends Model {
-  id : number;
-  filename: string;
-  path: string;
-  title: string;
-  description: string;
-  userId : number;
-  category: string;
-  status: "Approved" | "Pending" | "Hidden" | "Live"
+  public title!: string;
+  public description?: string;
+  public userId!: number;
+  public category!: string;
+  public content!: string;
+  public files : object;
+  public status!: "Approved" | "Pending" | "Hidden" | "Live";
+  public id!: number;
+  public binaryData!: Buffer | null;
+  public setBase64Data(base64String: string) {
+    this.binaryData = Buffer.from(base64String, 'base64');
+  }
+  public getBase64Data(): string | null {
+    return this.binaryData ? this.binaryData.toString('base64') : null;
+  }
 }
 
 Post.init(
   {
-
-   
     description : {
       type: DataTypes.STRING,
         allowNull: false,
@@ -29,10 +34,18 @@ Post.init(
         type: DataTypes.STRING,
         allowNull: false,
     },
-    media : {
-        type: DataTypes.JSON,
-      allowNull: false
-    }
+    content : {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+  binaryData : {
+    type : DataTypes.BLOB,
+    allowNull: true,
+  },
+  files : {
+    type: DataTypes.JSON,
+    allowNull: true,
+  },
     
 
   },

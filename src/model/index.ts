@@ -1,2 +1,5 @@
-export {UserModel} from './user.model'
-export {ProfileModel} from './profile.model'
+import * as db_models from './init.model'
+export const Model = () => {
+   db_models
+}
+Model()

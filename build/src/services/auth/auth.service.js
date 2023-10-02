@@ -30,13 +30,12 @@ const registerService = (payload) => __awaiter(void 0, void 0, void 0, function*
         }
     }
     const otp = (0, otp_1.OtpGen)(6);
-    try {
-        yield (0, email_template_1.emailTemplate)(payload.email, otp);
-    }
-    catch (error) {
-        console.error(error);
-        throw { ok: false, message: messages_1.default.FAILED_TO_SEND_EMAIL, status: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR };
-    }
+    // try{
+    //   await emailTemplate(payload.email, otp) 
+    // }catch(error){
+    //   console.error(error);
+    //   throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
+    // }
     const bearerTokens = yield (0, token_1.bearerToken)(payload);
     const confirmationCode = yield (0, encryption_1.encrypt)(otp.toString());
     let user;
@@ -54,7 +53,7 @@ const registerService = (payload) => __awaiter(void 0, void 0, void 0, function*
         ok: true,
         message: messages_1.default.CREATED,
         status: http_status_codes_1.StatusCodes.CREATED,
-        body: { user, bearerTokens }
+        body: { user, bearerTokens, otp }
     };
 });
 exports.registerService = registerService;
@@ -137,7 +136,7 @@ const LoginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
             message: messages_1.default.INCORRECT_LOGIN_DETAILS,
         };
     }
-    const bearerTokens = yield (0, token_1.bearerToken)({ fullname: user.fullname, email });
+    const bearerTokens = yield (0, token_1.bearerToken)({ fullname: user.fullname, email, id: user.id });
     let resUser = (0, exclude_1.ExcludeField)(user.dataValues, ['password', 'confirmationCode', 'resetToken']);
     return {
         ok: true,

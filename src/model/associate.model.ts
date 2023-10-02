@@ -1,10 +1,13 @@
-import { UserModel } from "./user.model"
-import { ProfileModel } from "./profile.model"
-export const DbAssociate = () => {
-    UserModel.hasOne(ProfileModel, {
-        foreignKey: 'userId'
-    })
-    ProfileModel.belongsTo(UserModel, {
-        foreignKey: 'userId'
-})
+import * as data_base from './init.model'
+export const Associate = () => {
+    data_base.UserModel.hasMany(data_base.PostModel, {
+        foreignKey : 'userId',
+         as : 'Posts'
+  })
+  
+  data_base.PostModel.belongsTo(data_base.UserModel, {
+      foreignKey : 'userId',
+         as : 'Posts'
+  })
 }
+Associate()

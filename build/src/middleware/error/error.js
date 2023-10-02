@@ -7,7 +7,7 @@ const ErrorMiddleware = (err, req, res, next) => {
         return res.status(err.status).json({ ok: err.ok, status: err.status, message: err.message });
     }
     if (err.status || 500) {
-        return res.status(500).json({ ok: false, status: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, message: "Server error" });
+        return res.status(500).json({ ok: false, status: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR, message: err.message });
     }
 };
 exports.ErrorMiddleware = ErrorMiddleware;
