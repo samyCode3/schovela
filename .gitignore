@@ -1,6 +1,4 @@
 node_modules
 .env
-./src/storage
+build
 index.js
-./build/src/storage
-./build/index.js
