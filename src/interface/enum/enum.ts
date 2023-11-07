@@ -12,7 +12,8 @@ export enum levels{
   five="500",
   six="600",
   pg="pg",
-  predeg="predegree"
+  predeg="predegree",
+  others="others"
 }
 
 export enum attachment_exts{
