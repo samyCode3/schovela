@@ -1,12 +1,13 @@
 import { Model, DataTypes, DATE, Sequelize } from "sequelize";
 import { sequelize } from "../config/database";
 import { ROLE } from "../interface/enum/enum";import path = require("path");
+import { UserModel } from "./user.model";
 ;
 class Profile extends Model {
   id : number;
   bio : string;
   path: string;
-  userId : number
+  UserId : number
 }
 
 Profile.init(
@@ -28,4 +29,5 @@ Profile.init(
   
   { sequelize }
 );
+Profile.belongsTo(UserModel);
 export const ProfileModel = Profile;

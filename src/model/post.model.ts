@@ -1,55 +1,65 @@
-import { Model, DataTypes, DATE, Sequelize } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../config/database";
-import { ROLE } from "../interface/enum/enum";
-;
+import { attachment_exts, levels } from "../interface/enum/enum";
+import { UserModel } from "./user.model";
+
 class Post extends Model {
   public title!: string;
-  public description?: string;
-  public userId!: number;
-  public category!: string;
-  public content!: string;
-  public files : object;
-  public status!: "Approved" | "Pending" | "Hidden" | "Live";
+  public desc: string;
+  public live!: boolean;
   public id!: number;
-  public binaryData!: Buffer | null;
-  public setBase64Data(base64String: string) {
-    this.binaryData = Buffer.from(base64String, 'base64');
-  }
-  public getBase64Data(): string | null {
-    return this.binaryData ? this.binaryData.toString('base64') : null;
-  }
+  public attachment!: string;
+  public attachment_ext!: attachment_exts;
+  public UserId!: number;
+  public level!: levels;
+  public faculty!: string;
+  public dept!: string;
 }
 
 Post.init(
   {
-    description : {
-      type: DataTypes.STRING,
-        allowNull: false,
+    id : {
+      type : DataTypes.INTEGER,
+      allowNull : false,
+      autoIncrement : true,
+      primaryKey : true
     },
     title : {
-      type: DataTypes.STRING,
-        allowNull: false,
+      type : DataTypes.STRING(100),
+      allowNull : false
     },
-    category : {
-        type: DataTypes.STRING,
-        allowNull: false,
+    desc : {
+      type : DataTypes.TEXT('long'),
+      allowNull : false
     },
-    content : {
-        type: DataTypes.STRING,
-        allowNull: true,
+    live : {
+      type : DataTypes.BOOLEAN,
+      defaultValue : false
     },
-  binaryData : {
-    type : DataTypes.BLOB,
-    allowNull: true,
-  },
-  files : {
-    type: DataTypes.JSON,
-    allowNull: true,
-  },
-    
-
+    attachment : {
+      type : DataTypes.STRING(100),
+      allowNull : false
+    },
+    attachment_ext : {
+      type : DataTypes.STRING,
+      allowNull : false
+    },
+    level : {
+      type : DataTypes.STRING,
+      allowNull : false
+    },
+    faculty : {
+      type : DataTypes.STRING(100),
+      allowNull : false
+    },
+    dept : {
+      type : DataTypes.STRING(100),
+      allowNull : false
+    }
   },
   
   { sequelize }
 );
+
+Post.belongsTo(UserModel);
 export const PostModel = Post;
