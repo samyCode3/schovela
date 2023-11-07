@@ -19,7 +19,7 @@ export const isDuplicate = async (title : string) : Promise<void> =>{
 
 export const postPermission = async (id : number, user : IUser) : Promise<any> =>{
        const post = (await getPostService(id)).body.post;
-
+       
        if(user.data.role !== ROLE.admin && user.data.role !== ROLE.moderator){
               if(user.data.id !== post.UserId){
                      throw { ok : false, message : messages.UNAUTHORIZED, status : StatusCodes.UNAUTHORIZED };
@@ -31,7 +31,7 @@ export const postPermission = async (id : number, user : IUser) : Promise<any> =
 
 export const editPostService = async (payload : editPost, user : IUser) : Promise<ApiResponseType> =>{
        let { id } = payload;
-       const oldPost = postPermission(id, user);
+       const oldPost = await postPermission(id, user);
 
        const fillables = Object.keys(payload);
        const updatePayload : any = {};
@@ -114,6 +114,11 @@ export const getAllPostService = async () => {
 export const getPostService = async (id: number) => {
        const getPostId = await Post.default.getById(id)
               .then((post: any) => {
+                     if(post === null){
+                            throw {
+                                   ok: false, status: StatusCodes.NOT_FOUND, message: messages.POST_NOT_FOUND
+                            }
+                     }
                      return { ok: true, status: StatusCodes.OK, message: "Success", body: { post } }
               })
               .catch((error: any) => {

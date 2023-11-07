@@ -11,7 +11,8 @@ export default {
           return create_post
      },
      edit : async (id : number, data : any) =>{
-          return await PostModel.update(data, { where : { id } });
+          await PostModel.update(data, { where : { id } });
+          return await PostModel.findOne({ where : { id } });
      },
      get: async () => {
           let options: any = {
