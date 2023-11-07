@@ -7,6 +7,7 @@ import {
     StatusCodes
    } from 'http-status-codes'
 import messages from '../utils/messages';
+import { ExcludeField } from '../helper/exclude';
 
 export const AuthUser = async (req, res, next): Promise<ApiResponseType> => {
    try {
@@ -26,7 +27,7 @@ export const AuthUser = async (req, res, next): Promise<ApiResponseType> => {
           message: messages.FORBIDDEN
         }
       }
-      req.user = userToken
+      req.user = {data : ExcludeField(findUser, ['password', 'resetToken', 'confirmationCode'])}
       next()
     } catch (err) {
       const error = new Error(err.message)

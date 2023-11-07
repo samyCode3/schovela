@@ -21,7 +21,7 @@ export const createPostService = async (payload: createPost, user: IUser) : Prom
 
        const dbPayload : any = payload;
        
-       if(user.data.role == (ROLE.admin || ROLE.moderator)){
+       if(user.data.role == ROLE.admin || user.data.tole == ROLE.moderator){
               dbPayload.live = true;
        }
 
