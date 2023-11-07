@@ -10,6 +10,9 @@ export default {
           const create_post = await Post.default.create({ ...payload }, PostModel)
           return create_post
      },
+     edit : async (id : number, data : any) =>{
+          return await PostModel.update(data, { where : { id } });
+     },
      get: async () => {
           let options: any = {
                limit: 10,

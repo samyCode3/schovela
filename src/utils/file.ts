@@ -11,3 +11,11 @@ export const uploadFileFromBase64 = (short_name : string, ext : string, data : s
 
     return newName;
 }
+
+export const deleteUpload = (path : string) : void =>{
+    try{
+        fs.unlinkSync(`uploads/${path}`);
+    }catch(error){
+        console.error(error);
+    }
+}

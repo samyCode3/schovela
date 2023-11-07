@@ -1,5 +1,5 @@
 import { NextFunction } from "express";
-import { createPostService, getPostService, getAllPostService, getAllPostByIdService } from "../services/post/index.post";
+import { createPostService, editPostService, getPostService, getAllPostService, getAllPostByIdService } from "../services/post/index.post";
 import { createPostSchema, editPostSchema } from "../utils/validation/post.joi";
 
 
