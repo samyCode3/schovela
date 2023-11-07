@@ -48,7 +48,8 @@ export default {
    getPostControllerById: async (req: Request | any, res: Response | any, next: NextFunction) => {
       const { user, params, body, url } = req
       try {
-         const post = await getPostService(params.id)
+         const payload = await hidePostSchema(params);
+         const post = await getPostService(payload.id)
          return res.status(post.status).json({ ...post })
       } catch (error) {
          next(error)
