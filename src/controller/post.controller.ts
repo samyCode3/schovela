@@ -1,9 +1,19 @@
 import { NextFunction } from "express";
-import { createPostService, editPostService, getPostService, getAllPostService, getAllPostByIdService } from "../services/post/index.post";
-import { createPostSchema, editPostSchema } from "../utils/validation/post.joi";
+import { createPostService, editPostService, hidePostService, getPostService, getAllPostService, getAllPostByIdService } from "../services/post/index.post";
+import { createPostSchema, editPostSchema, hidePostSchema } from "../utils/validation/post.joi";
 
 
 export default {
+   hidecontroller : async (req: Request | any, res: Response | any, next: NextFunction) => {
+      const { user, body, url } = req
+      try {
+         const payload = await hidePostSchema(body);
+         const post = await hidePostService(payload, user)
+         return res.status(post.status).json({ ...post })
+      } catch (error) {
+         next(error)
+      }
+   },
    editPostController: async (req: Request | any, res: Response | any, next: NextFunction) => {
       const { user, body, url } = req
       try {

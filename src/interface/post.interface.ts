@@ -20,3 +20,7 @@ export interface editPost {
    attachment?: string,
    attachment_ext?: attachment_exts
 }
+
+export interface hidePost{
+   id : number
+}

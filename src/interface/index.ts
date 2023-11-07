@@ -1,1 +1,1 @@
-export {createPost, editPost} from './post.interface'
+export {createPost, editPost, hidePost} from './post.interface'

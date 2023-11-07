@@ -5,6 +5,8 @@ import { StatusCodes } from "http-status-codes"
 import { FindOptions } from "sequelize"
 type PostModel = any
 
+const attributes = ['id', 'title', 'desc', 'level', 'faculty', 'attachment', 'attachment_ext', 'dept', 'createdAt', 'updatedAt', 'UserId'];
+
 export default {
      create: async (payload: any) => {
           const create_post = await Post.default.create({ ...payload }, PostModel)
@@ -17,7 +19,7 @@ export default {
      get: async () => {
           let options: any = {
                limit: 10,
-               attributes: ['id', 'title', 'content', 'category', 'createdAt', 'updatedAt', 'files', 'userId']
+               attributes
           }
           let posts = await Post.default.get(PostModel, options)
           return posts
@@ -25,7 +27,7 @@ export default {
      getById: async (id: number) => {
           let options: any = {
                limit: 10,
-               attributes: ['id', 'title', 'content', 'category', 'createdAt', 'updatedAt', 'files']
+               attributes
           }
           const postById = await Post.default.getByIds({ id }, PostModel, options)
           return postById
@@ -33,7 +35,7 @@ export default {
      getAllPostbyId: async (userId: number) => {
           let options: any = {
                limit: 10,
-               attributes: ['id', 'title', 'content', 'category', 'createdAt', 'updatedAt', 'files', 'userId']
+               attributes
           }
           const posts = await Post.default.getAllByIds({ userId }, PostModel, options)
           return posts

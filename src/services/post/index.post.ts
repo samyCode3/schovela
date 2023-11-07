@@ -1,1 +1,1 @@
-export {createPostService, getPostService, getAllPostService, getAllPostByIdService, editPostService} from './post.service'
+export {createPostService, getPostService, getAllPostService, getAllPostByIdService, editPostService, hidePostService} from './post.service'

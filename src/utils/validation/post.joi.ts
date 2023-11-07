@@ -2,8 +2,19 @@ import * as Joi from 'joi'
 import {
   StatusCodes
 } from 'http-status-codes'
-import { createPost, editPost } from '../../interface';
+import { createPost, editPost, hidePost } from '../../interface';
 import { attachment_exts, levels } from '../../interface/enum/enum';
+
+export const hidePostSchema = (body: any): Promise<hidePost> => {
+  const schema = Joi.object({
+    id: Joi.number().required()
+  })
+  const { error, value } = schema.validate(body, { abortEarly: false })
+  if (error) {
+    throw { ok: false, status: StatusCodes.BAD_REQUEST, message: error.message };
+  }
+  return value;
+}
 
 export const editPostSchema = (body: any): Promise<editPost> => {
   const schema = Joi.object({
@@ -21,7 +32,7 @@ export const editPostSchema = (body: any): Promise<editPost> => {
     throw { ok: false, status: StatusCodes.BAD_REQUEST, message: error.message };
   }
 
-  if(value.attachment && !value.attachment_ext){
+  if (value.attachment && !value.attachment_ext) {
     throw { ok: false, status: StatusCodes.BAD_REQUEST, message: "Extension required if attachment is passed." };
   }
 

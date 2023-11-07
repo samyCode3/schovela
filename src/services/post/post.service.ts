@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes'
-import { createPost, editPost } from '../../interface'
+import { createPost, editPost, hidePost } from '../../interface'
 import { IUser } from '../../interface/user.interface'
 import * as Post from '../../resources/postResources'
 import { PostModel } from '../../model/post.model'
@@ -27,6 +27,30 @@ export const postPermission = async (id : number, user : IUser) : Promise<any> =
        }
 
        return post;
+}
+
+export const hidePostService = async (payload : hidePost, user : IUser) : Promise<ApiResponseType> =>{
+       const { id } = payload;
+       const oldPost = await postPermission(id, user);
+
+       let live : boolean;
+
+       if(oldPost.live){
+              live = false;
+       }else{
+              live = true;
+       }
+
+       const edit_post = await Post.default.edit(id, { live })
+              .then((post: any) => {
+                     return { ok: true, status: StatusCodes.OK, message: "Success", body: { post } }
+              })
+              .catch((error: any) => {
+                     throw {
+                            ok: false, status: StatusCodes.BAD_REQUEST, message: { error: error.message }
+                     }
+              })
+       return edit_post
 }
 
 export const editPostService = async (payload : editPost, user : IUser) : Promise<ApiResponseType> =>{
