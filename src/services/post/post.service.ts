@@ -2,11 +2,23 @@ import { StatusCodes } from 'http-status-codes'
 import { createPost } from '../../interface'
 import { IUser } from '../../interface/user.interface'
 import * as Post from '../../resources/postResources'
+import { PostModel } from '../../model/post.model'
+import messages from '../../utils/messages'
+import { ApiResponseType } from '../../interface/api.interface'
 
 
-export const createPostService = async (payload: createPost, user: IUser) => {
+export const createPostService = async (payload: createPost, user: IUser) : Promise<ApiResponseType> => {
        let { id } = user.data
-       const create_post = await Post.default.create({ ...payload, userId: id })
+
+       let searchDuplicate = await PostModel.findOne({ where : { title : payload.title } });
+
+       if(searchDuplicate){
+              throw { ok : false, message : messages.DUPLICATE_TITLE, status : StatusCodes.BAD_REQUEST };
+       }
+
+       
+
+       const create_post = await Post.default.create({ ...payload, UserId: id })
               .then((post: any) => {
                      return { ok: true, status: StatusCodes.OK, message: "Success", body: { post } }
               })

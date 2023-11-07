@@ -4,14 +4,19 @@ import {
 } from 'http-status-codes'
 import { ApiResponseType } from '../../interface/api.interface';
 import { createPost } from '../../interface';
-export const registerSchema = (payload: createPost): Promise<ApiResponseType> => {
-      const body = Joi.object({
+import { attachment_exts, levels } from '../../interface/enum/enum';
+
+export const createPostSchema = (body : any): Promise<createPost> => {
+      const schema = Joi.object({
            title : Joi.string().required(),
-           files : Joi.array().required(),
-           category :  Joi.string().required(),
-           description :  Joi.string().required()
+           desc : Joi.string().required(),
+           level : Joi.any().required().valid(...Object.values(levels)),
+           faculty : Joi.string().required(),
+           dept : Joi.string().required(),
+           attachment : Joi.string().required().base64(),
+           attachment_ext : Joi.any().required().valid(...Object.values(attachment_exts)),
       })
-      const {error, value} = body.validate(payload, {abortEarly: false})
+      const {error, value} = schema.validate(body, {abortEarly: false})
       if(error) {
         throw { ok : false, status: StatusCodes.BAD_REQUEST, message: error.message};
       }

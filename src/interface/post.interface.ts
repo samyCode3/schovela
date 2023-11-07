@@ -1,12 +1,11 @@
-export interface createPost {
+import { attachment_exts, levels } from "./enum/enum";
 
-   title: string;
-   userId : string;
-   description?: string;
-   files: object;
-   content : string;
-   category: string;
-   status: "Approved" | "Pending" | "Hidden" | "Live";
-   id: number;
-   binaryData: Buffer | null;
+export interface createPost {
+   title: string,
+   desc: string,
+   level : levels,
+   faculty : string,
+   dept : string,
+   attachment : string,
+   attachment_ext : attachment_exts
 }

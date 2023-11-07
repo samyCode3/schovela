@@ -1,12 +1,14 @@
 import { NextFunction } from "express";
 import { createPostService, getPostService, getAllPostService, getAllPostByIdService} from "../services/post/index.post";
+import { createPostSchema } from "../utils/validation/post.joi";
 
 
 export default  {
     createPostController : async (req : Request | any, res : Response | any, next : NextFunction) => {
          const {user, body, url} = req
          try {
-              const post = await createPostService(body, user)
+               const payload = await createPostSchema(body);
+              const post = await createPostService(payload, user)
               return res.status(post.status).json({...post})
          } catch (error) {
             next(error)

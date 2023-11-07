@@ -24,5 +24,6 @@ export default {
     ADMIN_ALREADY_EXISTED  : "Admin already existed",
     ADMIN_IS_CREATED : "ADMIN is Created",
     USER_RECORD : "Record was retrived",
-    NO_USERS_FOUND : "No user yet in the database"
+    NO_USERS_FOUND : "No user yet in the database",
+    DUPLICATE_TITLE : "The title you provided hs already been used."
 }

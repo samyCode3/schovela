@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as fs from 'fs';
 // import * as config from 'config'
 import config from './config/default';
 import * as cors from 'cors'
@@ -27,6 +28,10 @@ const connections = async() =>{
        sequelize.sync({ alter : true }).then(async ()=>{
             console.log('Database connected successfully.');
             await seedData()
+            if(!fs.existsSync('uploads')){
+                fs.mkdirSync('uploads');
+                console.log('Created new uploads directory');
+            }
         app.listen(port, () => console.log(`App running on port http://localhost:${port}`))
         }).catch((err)=>{
             throw err;
