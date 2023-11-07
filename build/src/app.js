@@ -10,20 +10,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
+const fs = require("fs");
 // import * as config from 'config'
 const default_1 = require("./config/default");
 const cors = require("cors");
 const database_1 = require("./config/database");
 const admin_seed_1 = require("./model/admin.seed");
 const http_status_codes_1 = require("http-status-codes");
-require("./model/index");
+require("./model/init.models");
 const routes_1 = require("./routes");
 const port = default_1.default.PORT;
 const app = express();
 const connections = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        app.use(express.json());
+        app.use(express.json({ limit: '50mb' }));
+        app.use(express.urlencoded({ extended: true }));
         app.use(cors());
+        app.use(express.static('uploads'));
+        app.get('/', (req, res) => {
+            return res.send("Hello Schovela");
+        });
         app.use('/api', routes_1.IndexRoutes);
         app.all("*", (req, res, next) => {
             return res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({ ok: false, message: 'Route not found', body: `${req.method} - ${req.ip} - ${req.url}` });
@@ -31,6 +37,10 @@ const connections = () => __awaiter(void 0, void 0, void 0, function* () {
         database_1.sequelize.sync({ alter: true }).then(() => __awaiter(void 0, void 0, void 0, function* () {
             console.log('Database connected successfully.');
             yield (0, admin_seed_1.seedData)();
+            if (!fs.existsSync('uploads')) {
+                fs.mkdirSync('uploads');
+                console.log('Created new uploads directory');
+            }
             app.listen(port, () => console.log(`App running on port http://localhost:${port}`));
         })).catch((err) => {
             throw err;

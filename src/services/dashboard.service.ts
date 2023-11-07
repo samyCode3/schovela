@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { ProfileModel, UserModel } from "../model";
+import { ProfileModel } from "../model/profile.model";
+import { UserModel } from "../model/user.model";
 import { getById, DeleteById, create, updateOne, getByuserId, DeleteByUserId} from "../utils";
 import { IProfile, IFile, ProfileId } from "../interface/dashboard.interface";
 import * as fs  from "fs";
