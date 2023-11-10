@@ -8,7 +8,7 @@ export const ElevateValidation  = (payload : IElevate): Promise<ApiResponseType>
     const body = Joi.object({
         id : Joi.number().required()
     })
-    const {error, value} = body.validate(payload, { abortEarly : false})
+    const {error, value} = body.validate(payload, { abortEarly : true})
     if(error) {
         throw {
             ok : false,
@@ -25,7 +25,7 @@ export const filterUsersValidation = (body : any): FilterUsersType =>{
         page : Joi.number().optional().default(0)
     });
 
-    const {error, value} = schema.validate(body, { abortEarly : false})
+    const {error, value} = schema.validate(body, { abortEarly : true})
     if(error) {
         throw {
             ok : false,

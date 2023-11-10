@@ -1,6 +1,6 @@
 import { NextFunction } from "express";
 import { createPostService, editPostService, hidePostService, getPostService, getAllPostService, getAllPostByIdService } from "../services/post/index.post";
-import { createPostSchema, editPostSchema, hidePostSchema } from "../utils/validation/post.joi";
+import { createPostSchema, editPostSchema, filterPostValidation, hidePostSchema } from "../utils/validation/post.joi";
 
 
 export default {
@@ -36,9 +36,10 @@ export default {
    },
 
    getAllcontroller: async (req: Request | any, res: Response | any, next: NextFunction) => {
-      const { user, body, url } = req
+      const { user, query, url } = req
       try {
-         const post = await getAllPostService()
+         let payload = await filterPostValidation(query)
+         const post = await getAllPostService(payload, user)
          return res.status(post.status).json({ ...post })
       } catch (error) {
          next(error)

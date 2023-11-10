@@ -9,20 +9,20 @@ export const registerSchema = (payload: IRegister): Promise<ApiResponseType> => 
         fullname: Joi.string().required().min(4).max(10000),
         email: Joi.string().email().required()
       })
-      const {error, value} = body.validate(payload, {abortEarly: false})
+      const {error, value} = body.validate(payload, {abortEarly: true})
       if(error) {
         throw { ok : false, status: StatusCodes.BAD_REQUEST, message: error.message};
       }
       return value;
 }
 
-export const verifySchema = (payload: IverifyUser): Promise<ApiResponseType> => {
+export const verifySchema = async (payload: IverifyUser): Promise<ApiResponseType> => {
    const body = Joi.object({
      code : Joi.string().required(),
      password: Joi.string().required().min(8).max(10000),
      confirmPassword: Joi.ref('password')
    })
-   const {error, value} = body.validate(payload, {abortEarly: false})
+   const {error, value} = body.validate(payload, {abortEarly: true})
       if(error) {
         throw { ok : false, status: StatusCodes.BAD_REQUEST, message: error.message};
       }
@@ -30,7 +30,7 @@ export const verifySchema = (payload: IverifyUser): Promise<ApiResponseType> => 
 }
 
 
-export const UserInfoSchema = (schema: IUserInfo) : Promise<ApiResponseType> => {
+export const UserInfoSchema = async (schema: IUserInfo) : Promise<ApiResponseType> => {
   const body = Joi.object({
       department : Joi.string().optional(),
       level : Joi.number().optional(),
@@ -40,43 +40,43 @@ export const UserInfoSchema = (schema: IUserInfo) : Promise<ApiResponseType> => 
       dob: Joi.string().optional()
 
   })
-  const {error, value} = body.validate(schema, {abortEarly: false})
+  const {error, value} = body.validate(schema, {abortEarly: true})
    if(error) {
      throw { ok : false, status: StatusCodes.BAD_REQUEST, message: error.message};
    }
    return value;
 }
 
-export const loginSchema = (payload: ILogin): Promise<ApiResponseType> => {
+export const loginSchema = async (payload: ILogin): Promise<ApiResponseType> => {
   const body = Joi.object({
     email : Joi.string().email().required(),
     password: Joi.string().required().min(8).max(10000)
   })
-  const {error, value} = body.validate(payload, {abortEarly: false})
+  const {error, value} = body.validate(payload, {abortEarly: true})
      if(error) {
       throw { ok : false, status: StatusCodes.BAD_REQUEST, message: error.message};
      }
      return value;
 }
-export const ForgottenPasswordSchema = (payload: IChangePassword) => {
+export const ForgottenPasswordSchema = async (payload: IChangePassword) => {
    const body = Joi.object({
       email : Joi.string().required()
    })
-   const {error, value} = body.validate(payload, {abortEarly: false})
+   const {error, value} = body.validate(payload, {abortEarly: true})
    if(error) {
     throw { ok : false, status: StatusCodes.BAD_REQUEST, message: error.message};
    }
    return value;
 }
 
-export const ResetPasswordSchema = (payload: IForgotten) => {
+export const ResetPasswordSchema = async (payload: IForgotten) => {
     const body = Joi.object({
       email : Joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }).required(),
       code :  Joi.string().required(),
       NewPassword: Joi.string().required().min(8).max(10000000000),
       confirmPassword: Joi.ref("NewPassword")
     })
-    const {error, value} = body.validate(payload, {abortEarly: false})
+    const {error, value} = body.validate(payload, {abortEarly: true})
     if(error) {
      throw { ok : false, status: StatusCodes.BAD_REQUEST, message: error.message};
     }

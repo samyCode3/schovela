@@ -26,17 +26,22 @@ const connections = async() =>{
         app.all("*", (req, res, next) => {
             return res.status(StatusCodes.NOT_FOUND).json({ ok: false, message: 'Route not found', body : `${req.method} - ${req.ip} - ${req.url}`})
         })
-       sequelize.sync({ alter : true }).then(async ()=>{
+        sequelize.authenticate().then(() => {
             console.log('Database connected successfully.');
-            await seedData()
-            if(!fs.existsSync('uploads')){
-                fs.mkdirSync('uploads');
-                console.log('Created new uploads directory');
-            }
-        app.listen(port, () => console.log(`App running on port http://localhost:${port}`))
-        }).catch((err)=>{
-            throw err;
-        });
+            app.listen(port, () => console.log(`App running on port http://localhost:${port}`))
+        }) .catch(err => console.log(`Unable to connect`))
+    //    sequelize.sync({ alter : true }).then(async ()=>{
+    //         console.log('Database connected successfully.');
+
+    //         await seedData()
+    //         if(!fs.existsSync('uploads')){
+    //             fs.mkdirSync('uploads');
+    //             console.log('Created new uploads directory');
+    //         }
+    //     app.listen(port, () => console.log(`App running on port http://localhost:${port}`))
+    //     }).catch((err)=>{
+    //         throw err;
+    //     });
     } catch(err) { 
         console.error(`Error : ${err}, Can't connect to database...`);
     }

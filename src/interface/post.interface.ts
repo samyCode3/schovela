@@ -21,6 +21,14 @@ export interface editPost {
    attachment_ext?: attachment_exts
 }
 
+export interface FilterPostInterface {
+   level: levels,
+   faculty: string,
+   dept: string,
+   live: boolean,
+   limit : number,
+   offset: number
+}
 export interface hidePost{
    id : number
 }

@@ -67,12 +67,12 @@ export const LoginUserController = async (req, res) => {
  }
 }
 export const UserInfosController = async (req, res) => {
-  const  {body} = req
+  const  {body, user} = req
   let payload
   try {
    payload = await UserInfoSchema(body);
-   const user = await UserInfo(payload, req.user);
-   return res.status(user.status).json({ ...user });
+   const user_info = await UserInfo(payload, user);
+   return res.status(user_info.status).json({ ...user_info });
  } catch (error) {
   console.log(error)
    return res.status(error.status).json({ok: false, status: error.status, message : error.message});

@@ -4,12 +4,13 @@ import {
 } from 'http-status-codes'
 import { createPost, editPost, hidePost } from '../../interface';
 import { attachment_exts, levels } from '../../interface/enum/enum';
+import { FilterPostInterface } from '../../interface/post.interface';
 
 export const hidePostSchema = (body: any): Promise<hidePost> => {
   const schema = Joi.object({
     id: Joi.number().required()
   })
-  const { error, value } = schema.validate(body, { abortEarly: false })
+  const { error, value } = schema.validate(body, { abortEarly: true })
   if (error) {
     throw { ok: false, status: StatusCodes.BAD_REQUEST, message: error.message };
   }
@@ -49,7 +50,23 @@ export const createPostSchema = (body: any): Promise<createPost> => {
     attachment: Joi.string().required().base64(),
     attachment_ext: Joi.any().required().valid(...Object.values(attachment_exts)),
   })
-  const { error, value } = schema.validate(body, { abortEarly: false })
+  const { error, value } = schema.validate(body, { abortEarly: true })
+  if (error) {
+    throw { ok: false, status: StatusCodes.BAD_REQUEST, message: error.message };
+  }
+  return value;
+}
+
+export const filterPostValidation = async (body : FilterPostInterface): Promise<FilterPostInterface> => {
+  const schema = Joi.object({
+    level: Joi.any().valid(...Object.values(levels)),
+    faculty: Joi.string(),
+    dept: Joi.string(),
+    live: Joi.boolean().default(true),
+    limit : Joi.number().default(20),
+    offset : Joi.number(),
+  })
+  const { error, value } = schema.validate(body, { abortEarly: true })
   if (error) {
     throw { ok: false, status: StatusCodes.BAD_REQUEST, message: error.message };
   }

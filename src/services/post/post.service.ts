@@ -8,6 +8,9 @@ import { ApiResponseType } from '../../interface/api.interface'
 import { ROLE } from '../../interface/enum/enum'
 import { deleteUpload, uploadFileFromBase64 } from '../../utils/file'
 import { replaceAll } from '../../utils/string'
+import { FilterPostInterface } from '../../interface/post.interface'
+import { UserModel } from '../../model/user.model'
+import { Op } from 'sequelize'
 
 export const isDuplicate = async (title : string) : Promise<void> =>{
        const searchDuplicate = await PostModel.findOne({ where : { title } });
@@ -121,18 +124,41 @@ export const createPostService = async (payload: createPost, user: IUser) : Prom
               })
        return create_post
 }
-
-export const getAllPostService = async () => {
-       const posts = await Post.default.get()
-              .then((post: any) => {
-                     return { ok: true, status: StatusCodes.OK, message: "Success", body: { post } }
-              })
-              .catch((error: any) => {
-                     throw {
-                            ok: false, status: StatusCodes.BAD_REQUEST, message: { error: error.message }
-                     }
-              })
-       return posts
+ 
+export const getAllPostService = async (payload: FilterPostInterface, user: IUser) => {
+       let {id} = user.data
+       let {level, faculty, dept, live, limit, offset} = payload
+       if(offset > 0){
+              offset = offset * limit;
+          }
+       let post : any
+       let where : any = {}
+       let user_in = await UserModel.findOne({where: {id}}) 
+       
+       if(level) {
+              where = {level, live} 
+       }
+       if(faculty) {  
+              where = {faculty, live}
+       }
+       if(dept) { 
+              where = {dept, live}
+       } 
+       if(!level && !faculty && !dept) {
+              where = {[Op.or] : [{faculty : user_in.faculty}]}
+       }
+    
+      
+       let count = await PostModel.count({ where });
+       let total_pages = Math.ceil(count / limit);
+       post = await PostModel.findAll({where, limit, offset, order: [['id', 'DESC']], include: [UserModel]})
+    
+       return {
+              ok: true,
+              status: StatusCodes.OK,
+              message: `Data Retrived`,
+              body: {post, total_pages, limit} 
+       }
 }
 
 export const getPostService = async (id: number) => {
