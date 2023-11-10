@@ -127,26 +127,36 @@ export const createPostService = async (payload: createPost, user: IUser) : Prom
  
 export const getAllPostService = async (payload: FilterPostInterface, user: IUser) => {
        let {id} = user.data
-       let {level, faculty, dept, live, limit, offset} = payload
+       let {level, faculty, dept, live, limit, offset, search } = payload
        if(offset > 0){
               offset = offset * limit;
           }
        let post : any
        let where : any = {}
-       let user_in = await UserModel.findOne({where: {id}}) 
+       if(search) {
+              where = {
+                     [Op.or]: [
+                       { title: { [Op.like]: `%${search}%` } },
+                       { desc: { [Op.like]: `%${search}%` } },
+                     ],
+                   }
+       } else {
+              let user_in = await UserModel.findOne({where: {id}}) 
        
-       if(level) {
-              where = {level, live} 
+              if(level) {
+                     where = {level, live} 
+              }
+              if(faculty) {  
+                     where = {faculty, live}
+              }
+              if(dept) { 
+                     where = {dept, live}
+              } 
+              if(!(faculty || search || level || dept)) {
+                     where = {[Op.and] : [{faculty : user_in.faculty}]}
+              }
        }
-       if(faculty) {  
-              where = {faculty, live}
-       }
-       if(dept) { 
-              where = {dept, live}
-       } 
-       if(!level && !faculty && !dept) {
-              where = {[Op.or] : [{faculty : user_in.faculty}]}
-       }
+       
     
       
        let count = await PostModel.count({ where });

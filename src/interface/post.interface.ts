@@ -27,7 +27,8 @@ export interface FilterPostInterface {
    dept: string,
    live: boolean,
    limit : number,
-   offset: number
+   offset: number,
+   search: string
 }
 export interface hidePost{
    id : number

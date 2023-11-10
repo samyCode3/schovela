@@ -65,6 +65,7 @@ export const filterPostValidation = async (body : FilterPostInterface): Promise<
     live: Joi.boolean().default(true),
     limit : Joi.number().default(20),
     offset : Joi.number(),
+    search : Joi.string()
   })
   const { error, value } = schema.validate(body, { abortEarly: true })
   if (error) {
