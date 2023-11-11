@@ -10,10 +10,8 @@ import {
    } from 'http-status-codes'
 import './model/init.models'
 import { IndexRoutes } from './routes'; 
-import { sendMail } from './utils/sendEmail';
+
 const port = config.PORT;  
-const otp = '12345'
-console.log(sendMail({to: ["samsononifade07@gmail.com"], subject: 'Verify', text: 'Veudsi',  html: `<h1>Your verification Code is ${otp}</h1>`}))
 const app = express()
  
 const connections = async() =>{ 
