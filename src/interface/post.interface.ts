@@ -33,3 +33,4 @@ export interface FilterPostInterface {
 export interface hidePost{
    id : number
 }
+

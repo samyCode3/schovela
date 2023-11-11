@@ -154,6 +154,8 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
               } 
               if(!(faculty || search || level || dept)) {
                      where = {[Op.and] : [{faculty : user_in.faculty}]}
+              } else {
+
               }
        }
        
@@ -172,7 +174,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
 }
 
 export const getPostService = async (id: number) => {
-       const getPostId = await Post.default.getById(id)
+       const getPostId = await PostModel.findOne({where : {id}, include : [UserModel]})
               .then((post: any) => {
                      if(post === null){
                             throw {

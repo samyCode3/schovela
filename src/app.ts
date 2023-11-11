@@ -38,7 +38,7 @@ const connections = async() =>{
     //             fs.mkdirSync('uploads');
     //             console.log('Created new uploads directory');
     //         }
-    //     app.listen(port, () => console.log(`App running on port http://localhost:${port}`))
+    //     // app.listen(port, () => console.log(`App running on port http://localhost:${port}`))
     //     }).catch((err)=>{
     //         throw err;
     //     });
