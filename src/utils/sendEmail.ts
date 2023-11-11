@@ -15,7 +15,7 @@ import { mail } from "../config/emailConfig";
 //   }
 // };
 
-export const sendMail = async (details: { to: Array<string>, subject: string, text: string, html: string }) => {
+export const sendMail = async (details: { to: Array<string>, subject: string, text?: string, html: string }) => {
     let { to, subject, text, html } = details;
     let readyTo = to.join(', '); 
     const send = await mail.sendMail({
@@ -24,7 +24,7 @@ export const sendMail = async (details: { to: Array<string>, subject: string, te
         subject,
         text,
         html
-    });
+    }); 
   
 
     try {

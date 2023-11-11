@@ -10,16 +10,19 @@ import {
    } from 'http-status-codes'
 import './model/init.models'
 import { IndexRoutes } from './routes'; 
+import { sendMail } from './utils/sendEmail';
 const port = config.PORT;  
+const otp = '12345'
+console.log(sendMail({to: ["samsononifade07@gmail.com"], subject: 'Verify', text: 'Veudsi',  html: `<h1>Your verification Code is ${otp}</h1>`}))
 const app = express()
-
+ 
 const connections = async() =>{ 
     try{
         app.use(express.json({ limit : '50mb' }))
         app.use(express.urlencoded({ extended: true }))
         app.use(cors());
         app.use(express.static('uploads'));
-        app.get('/', (req, res) => {
+        app.get('/', (req, res) => { 
             return res.send("Hello Schovela")
         })
         app.use('/api', IndexRoutes)  
