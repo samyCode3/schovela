@@ -153,7 +153,7 @@ export const forgottenPassword = async (payload: IForgotten): Promise<ApiRespons
   const otp = OtpGen(4)
   
   try {
-    await emailTemplate(otp, email)
+    await emailTemplate(payload.email, otp) 
   } catch (error) {
     throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
   }

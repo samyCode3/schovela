@@ -26,7 +26,6 @@ export const sendMail = async (details: { to: Array<string>, subject: string, te
         html
     }); 
   
-
     try {
         return send.messageId;
     } catch (error) {

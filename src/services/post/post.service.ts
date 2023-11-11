@@ -152,18 +152,14 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
               if(dept) { 
                      where = {dept, live}
               } 
-              if(!(faculty || search || level || dept)) {
-                     where = {[Op.and] : [{faculty : user_in.faculty}]}
-              } else {
-
-              }
+            
        }
        
     
       
        let count = await PostModel.count({ where });
        let total_pages = Math.ceil(count / limit);
-       post = await PostModel.findAll({where, limit, offset, order: [['id', 'DESC']], include: [UserModel]})
+       post = await PostModel.findAll({where, limit, offset, order: [['id', 'DESC']]})
     
        return {
               ok: true,
