@@ -46,15 +46,15 @@ Post.init(
     },
     level : {
       type : DataTypes.STRING,
-      allowNull : false
+      allowNull : true
     },
     faculty : {
       type : DataTypes.STRING(100),
-      allowNull : false
+      allowNull : true
     },
     dept : {
       type : DataTypes.STRING(100),
-      allowNull : false
+      allowNull : true
     }
   },
   

@@ -43,9 +43,9 @@ export const editPostSchema = (body: any): Promise<editPost> => {
 export const createPostSchema = (body: any): Promise<createPost> => {
   const schema = Joi.object({
     title: Joi.string().required(),
-    desc: Joi.string().required(),
-    level: Joi.any().required().valid(...Object.values(levels)),
-    faculty: Joi.string().required(),
+    desc: Joi.string().optional(),
+    level: Joi.any().optional().valid(...Object.values(levels)),
+    faculty: Joi.string().optional(),
     dept: Joi.string().required(),
     attachment: Joi.string().required().base64(),
     attachment_ext: Joi.any().required().valid(...Object.values(attachment_exts)),
