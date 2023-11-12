@@ -85,7 +85,7 @@ export const ForgottenPasswordController = async (req, res) => {
  try {
     payload = await ForgottenPasswordSchema(body)
     const user = await forgottenPassword(payload)
-    return res.status(user.status).json({ ...user });
+    return res.status(user.status).json({ ...user }); 
  } catch (error) {
   console.log(error)
   return res.status(error.status).json({ok: false, status: error.status, message : error.message});

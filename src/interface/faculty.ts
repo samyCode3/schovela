@@ -41,7 +41,7 @@ const fieldsOfStudy: FieldOptions = {
     [FieldOfStudy.Arts]: [
         "English and Literary Studies",
         "French",
-        "History and International Studies",
+        "History and International Studies", 
         "Linguistics",
         "Mass Communication",
         "Nigerian Languages"

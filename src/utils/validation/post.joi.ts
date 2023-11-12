@@ -5,7 +5,11 @@ import {
 import { createPost, editPost, hidePost } from '../../interface';
 import { attachment_exts, levels } from '../../interface/enum/enum';
 import { FilterPostInterface } from '../../interface/post.interface';
+import { FieldOfStudy, fieldsOfStudy } from '../../interface/faculty';
 
+const validFaculties = Object.values(FieldOfStudy);
+const validDaparment = fieldsOfStudy
+const facultySchema = Joi.string().valid(...validFaculties).optional()
 export const hidePostSchema = (body: any): Promise<hidePost> => {
   const schema = Joi.object({
     id: Joi.number().required()
@@ -23,8 +27,10 @@ export const editPostSchema = (body: any): Promise<editPost> => {
     title: Joi.string().optional(),
     desc: Joi.string().optional(),
     level: Joi.any().optional().valid(...Object.values(levels)),
-    faculty: Joi.string().optional(),
-    dept: Joi.string().optional(),
+    dept: Joi.string().when('faculty', { 
+      is: Joi.valid(...validFaculties),
+      then: Joi.valid(...validDaparment[body.faculty])
+    }),
     attachment: Joi.string().optional().base64(),
     attachment_ext: Joi.any().optional().valid(...Object.values(attachment_exts)),
   })
@@ -41,15 +47,19 @@ export const editPostSchema = (body: any): Promise<editPost> => {
 }
 
 export const createPostSchema = (body: any): Promise<createPost> => {
+
   const schema = Joi.object({
-    title: Joi.string().required(),
+    title: Joi.string().required(), 
     desc: Joi.string().optional(),
-    level: Joi.any().optional().valid(...Object.values(levels)),
-    faculty: Joi.string().optional(),
-    dept: Joi.string().required(),
+    level: Joi.any().optional().valid(...Object.values(levels)), // Replace 'level1' and 'level2' with your actual level values
+    faculty: facultySchema,
+    dept: Joi.string().when('faculty', { 
+      is: Joi.valid(...validFaculties),
+      then: Joi.valid(...validDaparment[body.faculty])
+    }),
     attachment: Joi.string().required().base64(),
-    attachment_ext: Joi.any().required().valid(...Object.values(attachment_exts)),
-  })
+    attachment_ext: Joi.any().required().valid(...Object.values(attachment_exts)),// Replace 'ext1' and 'ext2' with your actual extension values
+  });
   const { error, value } = schema.validate(body, { abortEarly: true })
   if (error) {
     throw { ok: false, status: StatusCodes.BAD_REQUEST, message: error.message };
