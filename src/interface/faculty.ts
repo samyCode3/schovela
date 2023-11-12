@@ -10,7 +10,8 @@ enum FieldOfStudy {
     PhysicalAndComputingScience = "Physical and Computing Science",
     VeterinaryMedicine = "Veterinary Medicine",
     ManagementScience = "Management Science",
-    ChemicalAndLifeScience = "Chemical and Life Science"
+    ChemicalAndLifeScience = "Chemical and Life Science",
+    Gst = "GST"
 }
 
 interface FieldOptions {
@@ -26,6 +27,7 @@ interface FieldOptions {
     [FieldOfStudy.VeterinaryMedicine]: string[];
     [FieldOfStudy.ManagementScience]: string[];
     [FieldOfStudy.ChemicalAndLifeScience]: string[];
+    [FieldOfStudy.Gst]: any
 }
 
 const fieldsOfStudy: FieldOptions = {
@@ -81,13 +83,13 @@ const fieldsOfStudy: FieldOptions = {
         "Cybersecurity"
     ],
     [FieldOfStudy.VeterinaryMedicine]: [
-        "Vet Medicine"
-    ],
+        "Vet Medicine" 
+    ], 
     [FieldOfStudy.ManagementScience] : [
         "Accounting",
         "Business Administration",
         "Public Administration"
-    ],
+    ], 
     [FieldOfStudy.ChemicalAndLifeScience]: [
         "Biochemistry and Molecular Biology",
         "Biology",
@@ -96,8 +98,11 @@ const fieldsOfStudy: FieldOptions = {
         "Plant Science",
         "Pure and Environmental Chemistry",
         "Zoology"
+    ],
+    [FieldOfStudy.Gst] : [
+        
     ]
-
+ 
 };
 
 export { FieldOfStudy, FieldOptions, fieldsOfStudy };

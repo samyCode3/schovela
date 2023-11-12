@@ -8,7 +8,7 @@ import { FilterPostInterface } from '../../interface/post.interface';
 import { FieldOfStudy, fieldsOfStudy } from '../../interface/faculty';
 
 const validFaculties = Object.values(FieldOfStudy);
-const validDaparment = fieldsOfStudy
+const validDaparment =  fieldsOfStudy
 const facultySchema = Joi.string().valid(...validFaculties).optional()
 export const hidePostSchema = (body: any): Promise<hidePost> => {
   const schema = Joi.object({
@@ -27,6 +27,7 @@ export const editPostSchema = (body: any): Promise<editPost> => {
     title: Joi.string().optional(),
     desc: Joi.string().optional(),
     level: Joi.any().optional().valid(...Object.values(levels)),
+    faculty: facultySchema,
     dept: Joi.string().when('faculty', { 
       is: Joi.valid(...validFaculties),
       then: Joi.valid(...validDaparment[body.faculty])
@@ -52,16 +53,16 @@ export const createPostSchema = (body: any): Promise<createPost> => {
     title: Joi.string().required(), 
     desc: Joi.string().optional(),
     level: Joi.any().optional().valid(...Object.values(levels)), // Replace 'level1' and 'level2' with your actual level values
-    faculty: facultySchema,
+    faculty: Joi.string().valid(...validFaculties),
     dept: Joi.string().when('faculty', { 
       is: Joi.valid(...validFaculties),
-      then: Joi.valid(...validDaparment[body.faculty])
+      then: Joi.valid(...validDaparment[body.faculty]) 
     }),
     attachment: Joi.string().required().base64(),
     attachment_ext: Joi.any().required().valid(...Object.values(attachment_exts)),// Replace 'ext1' and 'ext2' with your actual extension values
   });
   const { error, value } = schema.validate(body, { abortEarly: true })
-  if (error) {
+  if (error) { 
     throw { ok: false, status: StatusCodes.BAD_REQUEST, message: error.message };
   }
   return value;

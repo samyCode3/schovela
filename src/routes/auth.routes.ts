@@ -13,9 +13,9 @@ import { AuthUser, RefreshToken } from '../middleware/auth'
 export const authRoutes = Router()
 
     authRoutes.get('/', (req, res, next) => { 
-         return res.send("Happy coding")
+         return res.send("Happy coding") 
     })  
-    authRoutes.post(`/create`, registerController) 
+    authRoutes.post(`/create`, registerController)  
     authRoutes.post(`/login`, LoginUserController) 
     authRoutes.post(`/verify`, AuthUser, VerifyUserAccountController)
     authRoutes.post(`/refresh`, AuthUser, RefreshToken)
