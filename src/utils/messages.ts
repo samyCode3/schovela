@@ -26,5 +26,6 @@ export default {
     USER_RECORD : "Record was retrived",
     NO_USERS_FOUND : "No user yet in the database",
     DUPLICATE_TITLE : "The title you provided hs already been used.",
-    POST_NOT_FOUND : "Post not found."
+    POST_NOT_FOUND : "Post not found.",
+    ONLY_ADMIN_CAN_PERFORM_THIS : "Only admin can perform this action."
 }

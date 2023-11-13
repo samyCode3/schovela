@@ -37,14 +37,19 @@ export const hidePostService = async (payload : hidePost, user : IUser) : Promis
        const oldPost = await postPermission(id, user);
 
        let live : boolean;
+       let dbPayload : any = {  }
 
-       if(oldPost.live){
-              live = false;
-       }else{
-              live = true;
+       if(oldPost.last_updated_by == ROLE.admin && user.data.role !== ROLE.admin && !oldPost.live){
+              throw { ok : false, message : messages.ONLY_ADMIN_CAN_PERFORM_THIS, status : StatusCodes.BAD_REQUEST };
        }
 
-       const edit_post = await Post.default.edit(id, { live })
+       if(oldPost.live){
+              dbPayload.live = false;
+       }else{
+              dbPayload.live = true;
+       }
+
+       const edit_post = await Post.default.edit(id, dbPayload)
               .then((post: any) => {
                      return { ok: true, status: StatusCodes.OK, message: "Success", body: { post } }
               })

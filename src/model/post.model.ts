@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../config/database";
-import { attachment_exts, levels } from "../interface/enum/enum";
+import { ROLE, attachment_exts, levels } from "../interface/enum/enum";
 import { UserModel } from "./user.model";
 
 class Post extends Model {
@@ -14,6 +14,7 @@ class Post extends Model {
   public level!: levels;
   public faculty!: string;
   public dept!: string;
+  public last_updated_by!: ROLE
 }
 
 Post.init(
@@ -55,6 +56,10 @@ Post.init(
     dept : {
       type : DataTypes.STRING(100),
       allowNull : true
+    },
+    last_updated_by : {
+      type : DataTypes.ENUM(...Object.values(ROLE)),
+      defaultValue : 'admin'
     }
   },
   
