@@ -6,6 +6,7 @@ import { getTotalUserController, getUserByFilterController, getUserByIdControlle
 
 export const adminRouter = Router()
 adminRouter.use(AuthUser)
+adminRouter.get(`/user/:id`, getUserByIdController) 
 adminRouter.use(IsAdmin)
 adminRouter.post(`/elevate`, ElevateUsers)
 adminRouter.post(`/moderator`, ElevateToModeratorController)
@@ -13,6 +14,5 @@ adminRouter.post(`/de_elevate`, De_elevateModeratorController)
 adminRouter.get(`/total/users`, getTotalUserController)            
 adminRouter.get(`/users`, getUserController)
 // adminRouter.get(`/filter/:role`, getUserByFilterController)
-adminRouter.get(`/user/:id`, getUserByIdController) 
 
 

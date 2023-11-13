@@ -22,7 +22,6 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
       }
     } 
     const otp = OtpGen(6);
-    console.log(otp)
     try{
       await emailTemplate(payload.email, otp) 
     }catch(error){

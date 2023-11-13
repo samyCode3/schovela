@@ -8,7 +8,7 @@ import { seedData } from './model/admin.seed';
 import {
     StatusCodes
    } from 'http-status-codes'
-import './model/init.models'
+import './model/index'
 import { IndexRoutes } from './routes'; 
 
 const port = config.PORT;  
@@ -31,7 +31,7 @@ const connections = async() =>{
             console.log('Database connected successfully.');
             app.listen(port, () => console.log(`App running on port http://localhost:${port}`))
         }) .catch(err => console.log(`Unable to connect`))
-    //    sequelize.sync({ alter : true }).then(async ()=>{
+    //    sequelize.sync({ alter : true}).then(async ()=>{
     //         console.log('Database connected successfully.');
 
     //         await seedData()
