@@ -59,7 +59,7 @@ Post.init(
     },
     last_updated_by : {
       type : DataTypes.ENUM(...Object.values(ROLE)),
-      defaultValue : 'admin'
+      defaultValue : ROLE.admin
     }
   },
   
