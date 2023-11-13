@@ -37,7 +37,7 @@ export const hidePostService = async (payload : hidePost, user : IUser) : Promis
        const oldPost = await postPermission(id, user);
 
        let live : boolean;
-       let dbPayload : any = {  }
+       let dbPayload : any = { last_updated_by : user.data.role };
 
        if(oldPost.last_updated_by == ROLE.admin && user.data.role !== ROLE.admin && !oldPost.live){
               throw { ok : false, message : messages.ONLY_ADMIN_CAN_PERFORM_THIS, status : StatusCodes.BAD_REQUEST };
