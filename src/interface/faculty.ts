@@ -21,7 +21,7 @@ interface FieldOptions {
     [FieldOfStudy.EngineeringAndEnvironmentalDesign]: string[];
     [FieldOfStudy.Law]: string[];
     [FieldOfStudy.LifeScience]: string[];
-    [FieldOfStudy.LifeScience]: string[];
+    [FieldOfStudy.SocialScience]: string[];
     [FieldOfStudy.PhysicalAndComputingScience]: string[];
     [FieldOfStudy.VeterinaryMedicine]: string[];
     [FieldOfStudy.ManagementScience]: string[];
@@ -72,6 +72,14 @@ const fieldsOfStudy: FieldOptions = {
     ],
     [FieldOfStudy.LifeScience]: [
     
+    ],
+    [FieldOfStudy.SocialScience] :  [
+        
+            "Geography",
+            "Economics",
+            "Political Science",
+            "Sociology"
+          
     ],
     [FieldOfStudy.PhysicalAndComputingScience]: [
         "Computer Science",

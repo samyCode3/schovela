@@ -46,7 +46,7 @@ export const registerService  =  async (payload: IRegister): Promise<ApiResponse
        ok: true,
        message: messages.CREATED,
        status: StatusCodes.CREATED,
-       body: {user, bearerTokens, otp} 
+       body: {user, bearerTokens} 
      }
    } 
 
