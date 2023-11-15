@@ -56,7 +56,7 @@ export const createPostSchema = (body: any): Promise<createPost> => {
     faculty: Joi.string().valid(...validFaculties).optional().allow(""),
     dept: Joi.when('faculty', { 
       is: Joi.valid(...validFaculties),
-      then: Joi.valid(...validDaparment[body.faculty] || []) 
+      then: Joi.valid(...(validDaparment[body.faculty] || [])) 
     }).optional(),
     attachment: Joi.string().required().base64(),
     attachment_ext: Joi.any().required().valid(...Object.values(attachment_exts)),// Replace 'ext1' and 'ext2' with your actual extension values

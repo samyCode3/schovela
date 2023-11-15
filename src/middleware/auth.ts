@@ -30,9 +30,9 @@ export const AuthUser = async (req, res, next): Promise<ApiResponseType> => {
       req.user = {data : ExcludeField(findUser, ['password', 'resetToken', 'confirmationCode'])}
       next()
     } catch (err) {
-      const error = new Error(err.message)
+      const error = new Error("Unauthorized request")
       console.error(error)
-      return res.status(StatusCodes.UNAUTHORIZED).json({ok: false, status: StatusCodes.UNAUTHORIZED, message: err.message })
+      return res.status(StatusCodes.UNAUTHORIZED).json({ok: false, status: StatusCodes.UNAUTHORIZED, message: "Unauthorized request"})
     }
 }
 export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => {
@@ -47,8 +47,8 @@ export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => 
       }
       next()
   } catch (err) {
-    const error = new Error(err.message)
-    return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: err.message }) 
+    const error = new Error("Unauthorized request")
+    return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: "Unauthorized request"}) 
   }
 }
 
@@ -71,8 +71,8 @@ export const RefreshToken = async(req, res, next) => {
       console.log(req.user)
       next()
       } catch(err) {
-        const error = new Error(err.message)
-        return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: err.message }) 
+        const error = new Error("Unauthorized request")
+        return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: "Unauthorized request" }) 
       }
 }
 export const IsAdmin = async (req, res, next) => {
@@ -100,8 +100,8 @@ export const IsAdmin = async (req, res, next) => {
     req.user = user
    next()
   } catch (err) {
-    const error = new Error(err.message)
-    return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: err.message }) 
+    const error = new Error("Unauthorized request")
+    return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: "Unauthorized request" }) 
   } 
  
 }
@@ -122,7 +122,7 @@ export const IsUser = async (req, res, next) => {
      req.user = user
      next()
   } catch (err) {
-    const error = new Error(err.message)
-    return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: err.message }) 
+    const error = new Error("Unauthorized request")
+    return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: "Unauthorized request" }) 
   } 
 }

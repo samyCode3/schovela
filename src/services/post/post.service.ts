@@ -140,6 +140,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
        let where : any = {}
        if(search) {
               where = {
+                      live: true,
                      [Op.or]: [
                        { title: { [Op.like]: `%${search}%` } },
                        { desc: { [Op.like]: `%${search}%` } },
@@ -149,21 +150,25 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
               let user_in = await UserModel.findOne({where: {id}}) 
        
               if(level) {
-                     where = {level, live} 
+                     where = {level, live: true} 
               }
               if(faculty) {  
-                     where = {faculty, live}
+                     where = {faculty, live: true}
               }
               if(dept) { 
-                     where = {dept, live}
+                     where = {dept, live: true}
               } 
-            
+              if(!(faculty || level || dept )) {
+                     where.live = true
+              }
+          
        }
        
     
       
        let count = await PostModel.count({ where });
        let total_pages = Math.ceil(count / limit);
+     
        post = await PostModel.findAll({where, limit, offset, order: [['id', 'DESC']]})
     
        return {
