@@ -9,7 +9,7 @@ import {
 import messages from '../utils/messages';
 import { ExcludeField } from '../helper/exclude';
 
-export const AuthUser = async (req, res, next): Promise<ApiResponseType> => {
+export const AuthUser = async (req: Request | any, res: Response | any, next: express.NextFunction): Promise<ApiResponseType> => {
    try {
       const authHeader = req.headers.authorization
       if (!authHeader) {
@@ -35,7 +35,7 @@ export const AuthUser = async (req, res, next): Promise<ApiResponseType> => {
       return res.status(StatusCodes.UNAUTHORIZED).json({ok: false, status: StatusCodes.UNAUTHORIZED, message: "Unauthorized request"})
     }
 }
-export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => {
+export const VerifiedUser = async (req: Request | any, res: Response | any, next: express.NextFunction): Promise<ApiResponseType> => {
   try {
       const {email} = req.user.data
       const user = await UserModel.findOne({ where: { email : email}})
@@ -53,7 +53,7 @@ export const VerifiedUser = async (req, res, next): Promise<ApiResponseType> => 
 }
 
 
-export const RefreshToken = async(req, res, next) => {
+export const RefreshToken = async(req: Request | any, res: Response | any, next: express.NextFunction) => {
       try {
        const refresh = refreshToken(req.user)
       if(!refresh) {
@@ -75,7 +75,7 @@ export const RefreshToken = async(req, res, next) => {
         return res.status(403).json({ok: false, status: StatusCodes.FORBIDDEN, message: "Unauthorized request" }) 
       }
 }
-export const IsAdmin = async (req, res, next) => {
+export const IsAdmin = async (req: Request | any, res: Response | any, next: express.NextFunction) => {
   try {
     const {email} = req.user.data
     console.log(email)
@@ -106,7 +106,7 @@ export const IsAdmin = async (req, res, next) => {
  
 }
 
-export const IsUser = async (req, res, next) => {
+export const IsUser = async (req: Request | any, res: Response | any, next: express.NextFunction) => {
   try {
      const {email} = req.user.data
      console.log(req.user)
