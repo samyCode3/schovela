@@ -1,19 +1,18 @@
 enum FieldOfStudy {
-    Agriculture = "Agriculture",
-    Arts = "Arts",
-    ArabicAndIslamicStudies = "Arabic and Islamic Studies",
-    EducationAndExtensionServices = "Education and Extension Services",
-    EngineeringAndEnvironmentalDesign = "Engineering and Environmental Design",
-    Law = "Law",
-    LifeScience = "Life Science",
-    SocialScience = "Social Science",
-    PhysicalAndComputingScience = "Physical and Computing Science",
-    VeterinaryMedicine = "Veterinary Medicine",
-    ManagementScience = "Management Science",
-    ChemicalAndLifeScience = "Chemical and Life Science",
+    Agriculture = "AGRICULTURE",
+    Arts = "ARTS",
+    ArabicAndIslamicStudies = "ARABIC AND ISLAMIC STUDIES",
+    EducationAndExtensionServices = "EDUCATION AND EXTENSION SERVICES",
+    EngineeringAndEnvironmentalDesign = "ENGINEERING AND ENVIRONMENTAL DESIGN",
+    Law = "LAW",
+    LifeScience = "LIFE SCIENCE",
+    SocialScience = "SOCIAL SCIENCE",
+    PhysicalAndComputingScience = "PHYSICAL AND COMPUTING SCIENCE",
+    VeterinaryMedicine = "VETERINARY MEDICINE",
+    ManagementScience = "MANAGEMENT SCIENCE",
+    ChemicalAndLifeScience = "CHEMICAL AND LIFE SCIENCE",
     Gst = "GST"
 }
-
 interface FieldOptions {
     [FieldOfStudy.Agriculture]: string[];
     [FieldOfStudy.Arts]: string[];
