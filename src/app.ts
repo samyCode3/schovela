@@ -31,18 +31,18 @@ const connections = async() =>{
             console.log('Database connected successfully.');
             app.listen(port, () => console.log(`App running on port http://localhost:${port}`))
         }) .catch(err => console.log(`Unable to connect`)) 
-    //    sequelize.sync({ alter : true}).then(async ()=>{
+       sequelize.sync({ alter : true}).then(async ()=>{
            
 
-    //         await seedData()
-    //         if(!fs.existsSync('uploads')){
-    //             fs.mkdirSync('uploads');
-    //             console.log('Created new uploads directory');
-    //         }
+            await seedData()
+            if(!fs.existsSync('uploads')){
+                fs.mkdirSync('uploads');
+                console.log('Created new uploads directory');
+            }
       
-    //     }).catch((err)=>{
-    //         throw err;
-    //     });
+        }).catch((err)=>{
+            throw err;
+        });
     } catch(err) { 
         console.error(`Error : ${err}, Can't connect to database...`);
     }
