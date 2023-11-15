@@ -53,11 +53,11 @@ export const createPostSchema = (body: any): Promise<createPost> => {
     title: Joi.string().required(), 
     desc: Joi.string().optional(),
     level: Joi.any().optional().valid(...Object.values(levels)), // Replace 'level1' and 'level2' with your actual level values
-    faculty: Joi.string().valid(...validFaculties),
-    dept: Joi.string().when('faculty', { 
+    faculty: Joi.string().valid(...validFaculties).optional().allow(""),
+    dept: Joi.when('faculty', { 
       is: Joi.valid(...validFaculties),
-      then: Joi.valid(...validDaparment[body.faculty]) 
-    }),
+      then: Joi.valid(...validDaparment[body.faculty] || []) 
+    }).optional(),
     attachment: Joi.string().required().base64(),
     attachment_ext: Joi.any().required().valid(...Object.values(attachment_exts)),// Replace 'ext1' and 'ext2' with your actual extension values
   });
