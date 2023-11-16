@@ -10,7 +10,7 @@ import { deleteUpload, uploadFileFromBase64 } from '../../utils/file'
 import { replaceAll } from '../../utils/string'
 import { FilterPostInterface } from '../../interface/post.interface'
 import { UserModel } from '../../model/user.model'
-import { Op } from 'sequelize'
+import { Op, Sequelize } from 'sequelize'
 
 export const isDuplicate = async (title : string) : Promise<void> =>{
        const searchDuplicate = await PostModel.findOne({ where : { title } });
@@ -157,8 +157,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
               }
 
               if(key == "search"){
-                     where.title = { [Op.like] : `%${filters[key]}%` }; 
-                     where.desc = { [Op.like] : `%${filters[key]}%` }; 
+                     where.title = { [Op.like]: Sequelize.fn('LOWER', `%${filters[key]}%`) }; 
                      continue;
               }
 
