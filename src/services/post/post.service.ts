@@ -12,40 +12,40 @@ import { FilterPostInterface } from '../../interface/post.interface'
 import { UserModel } from '../../model/user.model'
 import { Op, Sequelize } from 'sequelize'
 
-export const isDuplicate = async (title : string) : Promise<void> =>{
-       const searchDuplicate = await PostModel.findOne({ where : { title } });
+export const isDuplicate = async (title: string): Promise<void> => {
+       const searchDuplicate = await PostModel.findOne({ where: { title } });
 
-       if(searchDuplicate){
-              throw { ok : false, message : messages.DUPLICATE_TITLE, status : StatusCodes.BAD_REQUEST };
+       if (searchDuplicate) {
+              throw { ok: false, message: messages.DUPLICATE_TITLE, status: StatusCodes.BAD_REQUEST };
        }
 }
 
-export const postPermission = async (id : number, user : IUser) : Promise<any> =>{
+export const postPermission = async (id: number, user: IUser): Promise<any> => {
        const post = (await getPostService(id)).body.post;
-       
-       if(user.data.role !== ROLE.admin && user.data.role !== ROLE.moderator){
-              if(user.data.id !== post.UserId){
-                     throw { ok : false, message : messages.UNAUTHORIZED, status : StatusCodes.UNAUTHORIZED };
+
+       if (user.data.role !== ROLE.admin && user.data.role !== ROLE.moderator) {
+              if (user.data.id !== post.UserId) {
+                     throw { ok: false, message: messages.UNAUTHORIZED, status: StatusCodes.UNAUTHORIZED };
               }
        }
 
        return post;
 }
 
-export const hidePostService = async (payload : hidePost, user : IUser) : Promise<ApiResponseType> =>{
+export const hidePostService = async (payload: hidePost, user: IUser): Promise<ApiResponseType> => {
        const { id } = payload;
        const oldPost = await postPermission(id, user);
 
-       let live : boolean;
-       let dbPayload : any = { last_updated_by : user.data.role };
+       let live: boolean;
+       let dbPayload: any = { last_updated_by: user.data.role };
 
-       if(oldPost.last_updated_by == ROLE.admin && user.data.role !== ROLE.admin && !oldPost.live){
-              throw { ok : false, message : messages.ONLY_ADMIN_CAN_PERFORM_THIS, status : StatusCodes.BAD_REQUEST };
+       if (oldPost.last_updated_by == ROLE.admin && user.data.role !== ROLE.admin && !oldPost.live) {
+              throw { ok: false, message: messages.ONLY_ADMIN_CAN_PERFORM_THIS, status: StatusCodes.BAD_REQUEST };
        }
 
-       if(oldPost.live){
+       if (oldPost.live) {
               dbPayload.live = false;
-       }else{
+       } else {
               dbPayload.live = true;
        }
 
@@ -61,25 +61,25 @@ export const hidePostService = async (payload : hidePost, user : IUser) : Promis
        return edit_post
 }
 
-export const editPostService = async (payload : editPost, user : IUser) : Promise<ApiResponseType> =>{
+export const editPostService = async (payload: editPost, user: IUser): Promise<ApiResponseType> => {
        let { id } = payload;
        const oldPost = await postPermission(id, user);
 
        const fillables = Object.keys(payload);
-       const updatePayload : any = {};
+       const updatePayload: any = {};
 
-       for(let i = 0; i < fillables.length; i++){
+       for (let i = 0; i < fillables.length; i++) {
               let key = fillables[i]
 
-              if(key === "title"){
+              if (key === "title") {
                      await isDuplicate(payload.title);
               }
 
-              if(key === "attachment"){
+              if (key === "attachment") {
                      payload.attachment = uploadFileFromBase64(`content-${user.data.id}-${replaceAll(oldPost['title'].toLowerCase(), ' ', '-')}`, payload.attachment_ext, payload.attachment);
               }
 
-              if(key !== "id"){
+              if (key !== "id") {
                      updatePayload[key] = payload[key];
               }
        }
@@ -87,7 +87,7 @@ export const editPostService = async (payload : editPost, user : IUser) : Promis
 
        const edit_post = await Post.default.edit(id, updatePayload)
               .then((post: any) => {
-                     if(payload.attachment){
+                     if (payload.attachment) {
                             deleteUpload(oldPost['attachment']);
                      }
 
@@ -101,21 +101,21 @@ export const editPostService = async (payload : editPost, user : IUser) : Promis
        return edit_post
 }
 
-export const createPostService = async (payload: createPost, user: IUser) : Promise<ApiResponseType> => {
+export const createPostService = async (payload: createPost, user: IUser): Promise<ApiResponseType> => {
        let { id } = user.data;
 
        await isDuplicate(payload.title)
 
-       const dbPayload : any = payload;
-       
-       if(user.data.role == ROLE.admin || user.data.tole == ROLE.moderator){
+       const dbPayload: any = payload;
+
+       if (user.data.role == ROLE.admin || user.data.tole == ROLE.moderator) {
               dbPayload.live = true;
        }
 
-       try{
+       try {
               dbPayload.attachment = uploadFileFromBase64(`content-${id}-${replaceAll(payload.title.toLowerCase(), ' ', '-')}`, payload.attachment_ext, payload.attachment);
-       }catch(error){
-              throw { ok : false, message : messages.INTERNAL_SERVER_ERROR, status : StatusCodes.INTERNAL_SERVER_ERROR };
+       } catch (error) {
+              throw { ok: false, message: messages.INTERNAL_SERVER_ERROR, status: StatusCodes.INTERNAL_SERVER_ERROR };
        }
 
        const create_post = await Post.default.create({ ...dbPayload, UserId: id })
@@ -129,39 +129,44 @@ export const createPostService = async (payload: createPost, user: IUser) : Prom
               })
        return create_post
 }
- 
-export const getAllPostService = async (payload: FilterPostInterface, user: IUser) => {
-       let {id} = user.data
-       let {level, faculty, dept, live, limit, offset, search } = payload
-       let post : any
-       let where : any = { live : true };
 
-       if(user.data.role == ROLE.admin){
+export const getAllPostService = async (payload: FilterPostInterface, user: IUser) => {
+       let { id } = user.data
+       let { level, faculty, dept, live, limit, offset, search } = payload
+       let post: any
+       let where: any = { live: true };
+
+       if (user.data.role == ROLE.admin) {
               delete where.live;
        }
 
-       let filters : any = payload;
+       let filters: any = payload;
        delete filters.limit;
        delete filters.offset;
 
        let filterKeys = Object.keys(filters);
 
-       for(let i = 0; i < filterKeys.length; i++){
+       for (let i = 0; i < filterKeys.length; i++) {
               let key = filterKeys[i];
 
-              if(key == "live"){
-                     if(user.data.role === ROLE.admin){
+              if (key == "live") {
+                     if (user.data.role === ROLE.admin) {
                             where[key] = filters[key];
                      }
                      continue;
               }
 
-              if(key == "search"){
-                     where.title = { [Op.like]: Sequelize.fn('LOWER', `%${filters[key]}%`) }; 
+              if (key == "search") {
+                     where.title = Sequelize.where(
+                            Sequelize.fn('LOWER', Sequelize.col('title')),
+                            {
+                                   [Op.like]: Sequelize.fn('LOWER', `%${filters[key].toLowerCase()}%`)
+                            }
+                     )
                      continue;
               }
 
-              if(filters[key]){
+              if (filters[key]) {
                      where[key] = filters[key];
               }
        }
@@ -176,7 +181,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
        //             }
        // } else {
        //        let user_in = await UserModel.findOne({where: {id}}) 
-       
+
        //        if(level) {
        //               where = {level, live: true} 
        //        }
@@ -189,32 +194,32 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
        //        if(!(faculty || level || dept )) {
        //               where.live = true
        //        }
-          
+
        // }
-       
-    
-      
+
+
+
        let count = await PostModel.count({ where });
        let total_pages = Math.ceil(count / limit);
-     
-       post = await PostModel.findAll({where, limit, offset, order: [['id', 'DESC']]})
 
-       if(offset > 0){
+       post = await PostModel.findAll({ where, limit, offset, order: [['id', 'DESC']] })
+
+       if (offset > 0) {
               offset = offset * limit;
        }
-    
+
        return {
               ok: true,
               status: StatusCodes.OK,
               message: `Data Retrived`,
-              body: {post, total_pages, limit} 
+              body: { post, total_pages, limit }
        }
 }
 
 export const getPostService = async (id: number) => {
-       const getPostId = await PostModel.findOne({where : {id}, include : [UserModel]})
+       const getPostId = await PostModel.findOne({ where: { id }, include: [UserModel] })
               .then((post: any) => {
-                     if(post === null){
+                     if (post === null) {
                             throw {
                                    ok: false, status: StatusCodes.NOT_FOUND, message: messages.POST_NOT_FOUND
                             }
