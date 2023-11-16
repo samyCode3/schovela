@@ -133,36 +133,65 @@ export const createPostService = async (payload: createPost, user: IUser) : Prom
 export const getAllPostService = async (payload: FilterPostInterface, user: IUser) => {
        let {id} = user.data
        let {level, faculty, dept, live, limit, offset, search } = payload
-       if(offset > 0){
-              offset = offset * limit;
-          }
        let post : any
-       let where : any = {}
-       if(search) {
-              where = {
-                      live: true,
-                     [Op.or]: [
-                       { title: { [Op.like]: `%${search}%` } },
-                       { desc: { [Op.like]: `%${search}%` } },
-                     ],
-                   }
-       } else {
-              let user_in = await UserModel.findOne({where: {id}}) 
-       
-              if(level) {
-                     where = {level, live: true} 
-              }
-              if(faculty) {  
-                     where = {faculty, live: true}
-              }
-              if(dept) { 
-                     where = {dept, live: true}
-              } 
-              if(!(faculty || level || dept )) {
-                     where.live = true
-              }
-          
+       let where : any = { live : true };
+
+       if(user.data.role == ROLE.admin){
+              delete where.live;
        }
+
+       let filters : any = payload;
+       delete filters.limit;
+       delete filters.offset;
+
+       let filterKeys = Object.keys(filters);
+
+       for(let i = 0; i < filterKeys.length; i++){
+              let key = filterKeys[i];
+
+              if(key == "live"){
+                     if(user.data.role === ROLE.admin){
+                            where[key] = filters[key];
+                     }
+                     continue;
+              }
+
+              if(key == "search"){
+                     where.title = { [Op.like] : `%${filters[key]}%` }; 
+                     where.desc = { [Op.like] : `%${filters[key]}%` }; 
+                     continue;
+              }
+
+              if(filters[key]){
+                     where[key] = filters[key];
+              }
+       }
+
+       // if(search) {
+       //        where = {
+       //                live: true,
+       //               [Op.or]: [
+       //                 { title: { [Op.like]: `%${search}%` } },
+       //                 { desc: { [Op.like]: `%${search}%` } },
+       //               ],
+       //             }
+       // } else {
+       //        let user_in = await UserModel.findOne({where: {id}}) 
+       
+       //        if(level) {
+       //               where = {level, live: true} 
+       //        }
+       //        if(faculty) {  
+       //               where = {faculty, live: true}
+       //        }
+       //        if(dept) { 
+       //               where = {dept, live: true}
+       //        } 
+       //        if(!(faculty || level || dept )) {
+       //               where.live = true
+       //        }
+          
+       // }
        
     
       
@@ -170,6 +199,10 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
        let total_pages = Math.ceil(count / limit);
      
        post = await PostModel.findAll({where, limit, offset, order: [['id', 'DESC']]})
+
+       if(offset > 0){
+              offset = offset * limit;
+       }
     
        return {
               ok: true,
