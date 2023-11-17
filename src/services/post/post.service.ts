@@ -180,8 +180,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
        }
 
        let count = await PostModel.count({ where });
-       let total_pages = Math.ceil(count / limit);
-
+       let total_pages = Math.ceil(count / limit)
        post = await PostModel.findAll({ where, limit, offset, order: [['id', 'DESC']] })
 
        if (offset > 0) {
