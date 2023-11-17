@@ -11,6 +11,7 @@ import { replaceAll } from '../../utils/string'
 import { FilterPostInterface } from '../../interface/post.interface'
 import { UserModel } from '../../model/user.model'
 import { Op, Sequelize } from 'sequelize'
+import { ViewModel } from '../../model/view.model'
 
 export const isDuplicate = async (title: string): Promise<void> => {
        const searchDuplicate = await PostModel.findOne({ where: { title } });
@@ -21,7 +22,7 @@ export const isDuplicate = async (title: string): Promise<void> => {
 }
 
 export const postPermission = async (id: number, user: IUser): Promise<any> => {
-       const post = (await getPostService(id)).body.post;
+       const post = (await getPostServices(id)).body.post;
 
        if (user.data.role !== ROLE.admin && user.data.role !== ROLE.moderator) {
               if (user.data.id !== post.UserId) {
@@ -131,15 +132,15 @@ export const createPostService = async (payload: createPost, user: IUser): Promi
 }
 
 export const getAllPostService = async (payload: FilterPostInterface, user: IUser) => {
-       let { id } = user.data
-       let { level, faculty, dept, live, limit, offset, search } = payload
+       let { id, role } = user.data
+       let {  limit, offset, live } = payload
        let post: any
        let where: any = { live: true };
 
        if (user.data.role == ROLE.admin) {
               delete where.live;
        }
-
+       
        let filters: any = payload;
        delete filters.limit;
        delete filters.offset;
@@ -153,8 +154,15 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
                      if (user.data.role === ROLE.admin) {
                             where[key] = filters[key];
                      }
+                     if(role === ROLE.user) {
+                            if(live === false) {
+                                   where = {UserId: id, live: false }
+                            }
+                     }
                      continue;
               }
+
+             
 
               if (key == "search") {
                      where.title = Sequelize.where(
@@ -170,34 +178,6 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
                      where[key] = filters[key];
               }
        }
-
-       // if(search) {
-       //        where = {
-       //                live: true,
-       //               [Op.or]: [
-       //                 { title: { [Op.like]: `%${search}%` } },
-       //                 { desc: { [Op.like]: `%${search}%` } },
-       //               ],
-       //             }
-       // } else {
-       //        let user_in = await UserModel.findOne({where: {id}}) 
-
-       //        if(level) {
-       //               where = {level, live: true} 
-       //        }
-       //        if(faculty) {  
-       //               where = {faculty, live: true}
-       //        }
-       //        if(dept) { 
-       //               where = {dept, live: true}
-       //        } 
-       //        if(!(faculty || level || dept )) {
-       //               where.live = true
-       //        }
-
-       // }
-
-
 
        let count = await PostModel.count({ where });
        let total_pages = Math.ceil(count / limit);
@@ -216,7 +196,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
        }
 }
 
-export const getPostService = async (id: number) => {
+export const getPostServices = async (id: number) => {
        const getPostId = await PostModel.findOne({ where: { id }, include: [UserModel] })
               .then((post: any) => {
                      if (post === null) {
@@ -233,12 +213,31 @@ export const getPostService = async (id: number) => {
               })
        return getPostId
 }
+export const getPostService = async (id: number) => {
+       const getPostId = await PostModel.findOne({ where: { id }, include: [UserModel] })
+       if(!getPostId) {
+              throw {
+                     ok: false,
+                     status: StatusCodes.BAD_REQUEST,
+                     messages : `post not found`
+              }
+       }
+       const views = await ViewModel.count({where: {postId: id}})
+       return {
+              ok: true,
+              status: StatusCodes.OK,
+              messages: `Post retrived`,
+              body: {getPostId, views}
+              
+       }
+}
 
 
 export const getAllPostByIdService = async (user: IUser) => {
        let { id } = user
        let userId = id
        const posts = await Post.default.getAllPostbyId(userId)
+       
               .then((post: any) => {
                      return { ok: true, status: StatusCodes.OK, message: "Success", body: { post } }
               })
