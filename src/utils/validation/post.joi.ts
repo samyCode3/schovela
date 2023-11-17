@@ -76,7 +76,7 @@ export const filterPostValidation = async (body : FilterPostInterface): Promise<
     limit : Joi.number().default(20),
     offset : Joi.number(),
     search : Joi.string()
-  })
+  }).unknown()
   const { error, value } = schema.validate(body, { abortEarly: true })
   if (error) {
     throw { ok: false, status: StatusCodes.BAD_REQUEST, message: error.message };
