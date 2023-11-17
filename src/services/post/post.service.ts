@@ -22,7 +22,7 @@ export const isDuplicate = async (title: string): Promise<void> => {
 }
 
 export const postPermission = async (id: number, user: IUser): Promise<any> => {
-       const post = (await getPostServices(id)).body.post;
+       const post = (await postCheck(id)).body.post;
 
        if (user.data.role !== ROLE.admin && user.data.role !== ROLE.moderator) {
               if (user.data.id !== post.UserId) {
@@ -196,7 +196,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
        }
 }
 
-export const getPostServices = async (id: number) => {
+export const postCheck = async (id: number) => {
        const getPostId = await PostModel.findOne({ where: { id }, include: [UserModel] })
               .then((post: any) => {
                      if (post === null) {
@@ -214,8 +214,8 @@ export const getPostServices = async (id: number) => {
        return getPostId
 }
 export const getPostService = async (id: number) => {
-       const getPostId = await PostModel.findOne({ where: { id }, include: [UserModel] })
-       if(!getPostId) {
+       const post = await PostModel.findOne({ where: { id }, include: [UserModel] })
+       if(!post) {
               throw {
                      ok: false,
                      status: StatusCodes.BAD_REQUEST,
@@ -227,7 +227,7 @@ export const getPostService = async (id: number) => {
               ok: true,
               status: StatusCodes.OK,
               messages: `Post retrived`,
-              body: {getPostId, views}
+              body: {post, views}
               
        }
 }
