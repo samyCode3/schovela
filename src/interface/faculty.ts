@@ -64,7 +64,7 @@ const fieldsOfStudy: FieldOptions = {
         "Civil Engineering",
         "Electrical/Electronics",
         "Environmental and Resources Management",
-        "Information and Computer Technology (ICT)",
+        "Information and Computer Technology (ICT)", 
         "Mechanical Engineering"
     ],
     [FieldOfStudy.Law] : [
