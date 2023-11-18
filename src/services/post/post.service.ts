@@ -136,13 +136,18 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
        let {  limit, offset, live } = payload
        let post: any
        let where: any = { live: true };
-
+ 
        if (user.data.role == ROLE.admin) {
               delete where.live;
        }
-       
+        
+       if (user.data.role === ROLE.user && payload.live === false) {
+              where.UserId = id;
+              where.live = false;
+          } 
+
        let filters: any = payload;
-       delete filters.limit;
+       delete filters.limit; 
        delete filters.offset;
 
        let filterKeys = Object.keys(filters);
@@ -154,11 +159,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
                      if (user.data.role === ROLE.admin) {
                             where[key] = filters[key];
                      }
-                     if(role === ROLE.user) {
-                            if(live === false) {
-                                   where = {UserId: id, live: false }
-                            }
-                     }
+                    
                      continue;
               }
 
@@ -183,11 +184,11 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
        let total_pages = Math.ceil(count / limit)
        post = await PostModel.findAll({ where, limit, offset, order: [['id', 'DESC']] })
 
-       if (offset > 0) {
-              offset = offset * limit;
+       if (offset > 0) { 
+              offset = offset * limit; 
        }
 
-       return {
+       return { 
               ok: true,
               status: StatusCodes.OK,
               message: `Data Retrived`,

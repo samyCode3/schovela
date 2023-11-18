@@ -73,7 +73,7 @@ export const filterPostValidation = async (body : FilterPostInterface): Promise<
     level: Joi.any().valid(...Object.values(levels)),
     faculty: Joi.string(),
     dept: Joi.string(),
-    live: Joi.string().allow(""),
+    live: Joi.boolean().optional(),
     limit : Joi.number().default(20),
     offset : Joi.number(),
     search : Joi.string()
