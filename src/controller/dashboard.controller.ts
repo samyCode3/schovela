@@ -6,6 +6,7 @@ import {
     deleteProfile 
 } from '../services/index.service'
 import { UploadFileValidation } from '../utils/validation/index.joi'
+
 export const UploadProfileController = async (req: Request | any, res : Response | any, next : NextFunction) => {
     let {user, body, file} = req
     try {
@@ -58,3 +59,4 @@ export const deleteProfileController = async (req: Request | any, res : Response
      
     }
 }
+

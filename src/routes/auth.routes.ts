@@ -10,7 +10,7 @@ import {
    
     } from '../controller/auth.controller'
 import { AuthUser, RefreshToken } from '../middleware/auth' 
-export const authRoutes = Router()
+export const authRoutes = Router() 
 
     authRoutes.get('/', (req, res, next) => { 
          return res.send("Happy coding") 

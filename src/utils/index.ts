@@ -1,1 +1,1 @@
-export {getById, create, DeleteById, updateOne, getByuserId, DeleteByUserId} from './unique'
+export {getById, create, DeleteById, updateOne, getByuserId, DeleteByUserId} from './unique' 

@@ -14,7 +14,7 @@ export const getUserController = async (req, res, next) => {
     const { query } = req;
     try {
         const payload = filterUsersValidation(query);
-        const user = await get_all_user(payload);
+        const user = await get_all_user(payload);     
         return res.json({ ...user })
     } catch (error) {
         next(error)

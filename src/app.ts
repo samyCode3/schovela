@@ -36,7 +36,7 @@ const connections = async() =>{
 
     //         await seedData()
     //         if(!fs.existsSync('uploads')){
-    //             fs.mkdirSync('uploads');
+    //             fs.mkdirSync('uploads'); 
     //             console.log('Created new uploads directory');
     //         }
       

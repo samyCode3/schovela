@@ -4,7 +4,11 @@ import { UserModel } from "../model/user.model";
 import { getById, DeleteById, create, updateOne, getByuserId, DeleteByUserId} from "../utils";
 import { IProfile, IFile, ProfileId } from "../interface/dashboard.interface";
 import * as fs  from "fs";
-import { IUser } from "../interface/user.interface";
+import { IUser, ROLE } from "../interface/user.interface";
+import { Op } from "sequelize";
+import { PostModel } from "../model/post.model";
+import { ViewModel } from "../model/view.model";
+import { ApiResponseType } from "../interface/api.interface";
 
 
 export const UploadProfile = async (payload: IProfile, file: IFile, user: IUser) => {
@@ -68,3 +72,4 @@ export const deleteProfile = async ( user: IUser) => {
         body : {}
        }
 }
+

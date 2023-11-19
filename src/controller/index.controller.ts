@@ -2,5 +2,5 @@ export {
     UploadProfileController,
     getProfileImageController,
     updateProfileController,
-    deleteProfileController
-} from './dashboard.controller'
+    deleteProfileController,
+} from './dashboard.controller' 

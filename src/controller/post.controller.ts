@@ -3,6 +3,7 @@ import { createPostService, editPostService, hidePostService, getPostService, ge
 import { createPostSchema, editPostSchema, filterPostValidation, hidePostSchema } from "../utils/validation/post.joi";
 
 
+
 export default {
    hidecontroller : async (req: Request | any, res: Response | any, next: NextFunction) => {
       const { user, body, url } = req
@@ -67,5 +68,6 @@ export default {
       }
    }
 }
+
 
 
