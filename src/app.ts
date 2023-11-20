@@ -27,8 +27,9 @@ const connections = async() =>{
         app.all("*", (req, res, next) => {
             return res.status(StatusCodes.NOT_FOUND).json({ ok: false, message: 'Route not found', body : `${req.method} - ${req.ip} - ${req.url}`})
         })
-        sequelize.sync({ alter : true }).then(() => {
+        sequelize.sync({ alter : true }).then(async () => {
             console.log('Database connected successfully.');
+            await seedData();
             app.listen(port, () => console.log(`App running on port http://localhost:${port}`))
         }) .catch(err => console.log(err)) 
     //    sequelize.sync({ alter : true}).then(async ()=>{
