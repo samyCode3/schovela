@@ -1,6 +1,5 @@
 // import * as config from 'config';
 import config from './default';
-import * as pg from 'pg'
 import {Sequelize} from 'sequelize' 
 // console.log(config);
 // const host = config.get<string>('DATABASE.HOST')
@@ -18,12 +17,12 @@ import {Sequelize} from 'sequelize'
 //     port : port
 // })
 
+
 export const sequelize = new Sequelize({
-    dialect : 'postgres',
-    dialectModule: pg,
-    host : config.DATABASE.HOST,
-    username : config.DATABASE.USER,
-    password : config.DATABASE.PASS,
-    database : config.DATABASE.DB,
-    port : Number(config.DATABASE.PORT)
+    dialect : 'mysql',
+    host : process.env.DB_HOST,
+    username : process.env.DB_USER,
+    password : process.env.PASS,
+    database : process.env.DATABASE,
+    port : Number(process.env.MYSQL_PORT)
 })
