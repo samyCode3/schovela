@@ -9,7 +9,7 @@ import {
      ResendUserOtp
    
     } from '../controller/auth.controller'
-import { AuthUser, RefreshToken } from '../middleware/auth' 
+import { AuthUser, RefreshToken, UnverifiedUser } from '../middleware/auth' 
 export const authRoutes = Router() 
 
     authRoutes.get('/', (req, res, next) => { 
@@ -17,7 +17,7 @@ export const authRoutes = Router()
     })  
     authRoutes.post(`/create`, registerController)  
     authRoutes.post(`/login`, LoginUserController) 
-    authRoutes.post(`/verify`, AuthUser, VerifyUserAccountController)
+    authRoutes.post(`/verify`, UnverifiedUser, VerifyUserAccountController)
     authRoutes.post(`/refresh`, AuthUser, RefreshToken)
     authRoutes.patch(`/resend`, AuthUser, ResendUserOtp)
     authRoutes.patch(`/forgot`, ForgottenPasswordController)

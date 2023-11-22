@@ -8,7 +8,28 @@ import {
    } from 'http-status-codes'
 import messages from '../utils/messages';
 import { ExcludeField } from '../helper/exclude';
-
+export const UnverifiedUser = async (req: Request | any, res: Response | any, next: express.NextFunction): Promise<ApiResponseType> => {
+   try {
+      const authHeader = req.headers.authorization
+      if (!authHeader) {
+      return res.status(StatusCodes.UNAUTHORIZED).json( { ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED
+        })
+      }
+  
+      const token = authHeader.split(" ")[1];
+      const userToken = await verifyTokens(token, process.env.BEARER_TOKEN)
+      const findUser = await UserModel.findOne({where : { email : userToken.data.email}})
+      if (!findUser) {
+        return res.status(StatusCodes.UNAUTHORIZED).json( { ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED})
+      }
+      req.user = {data : ExcludeField(findUser, ['password', 'resetToken', 'confirmationCode'])}
+      next()
+    } catch (err) {
+      const error = new Error("Unauthorized request")
+      console.error(error)
+      return res.status(StatusCodes.UNAUTHORIZED).json({ok: false, status: StatusCodes.UNAUTHORIZED, message: "Unauthorized request"})
+    }
+}
 export const AuthUser = async (req: Request | any, res: Response | any, next: express.NextFunction): Promise<ApiResponseType> => {
    try {
       const authHeader = req.headers.authorization
@@ -21,11 +42,12 @@ export const AuthUser = async (req: Request | any, res: Response | any, next: ex
       const userToken = await verifyTokens(token, process.env.BEARER_TOKEN)
       const findUser = await UserModel.findOne({where : { email : userToken.data.email}})
       if (!findUser) {
-        return {
-          ok: false,
-          status: StatusCodes.FORBIDDEN,
-          message: messages.FORBIDDEN
-        }
+        return res.status(StatusCodes.UNAUTHORIZED).json( { ok: false, status: StatusCodes.UNAUTHORIZED, message: messages.UNAUTHORIZED
+      })
+    }
+
+      if(findUser.status != true) {
+        return res.status(StatusCodes.UNAUTHORIZED).json( { ok: false, status: StatusCodes.UNAUTHORIZED, message: `Please verify your email, before u proceed`})
       }
       req.user = {data : ExcludeField(findUser, ['password', 'resetToken', 'confirmationCode'])}
       next()
@@ -35,6 +57,7 @@ export const AuthUser = async (req: Request | any, res: Response | any, next: ex
       return res.status(StatusCodes.UNAUTHORIZED).json({ok: false, status: StatusCodes.UNAUTHORIZED, message: "Unauthorized request"})
     }
 }
+
 export const VerifiedUser = async (req: Request | any, res: Response | any, next: express.NextFunction): Promise<ApiResponseType> => {
   try {
       const {email} = req.user.data
