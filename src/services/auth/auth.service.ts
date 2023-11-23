@@ -118,6 +118,26 @@ export const LoginUser = async (payload:  ILogin) => {
       message: messages.INCORRECT_LOGIN_DETAILS,
     }
    }
+   // 302 status
+   let otp = OtpGen(6);
+   let bearerTokens = await bearerToken({ fullname : user.fullname, email, id : user.id })
+   let confirmationCode =  await encrypt(otp.toString())
+   if(user.status !== true) {
+    try{
+      await emailTemplate(user.email, otp) 
+    }catch(error){
+      console.error(error);
+      throw { ok : false, message : messages.FAILED_TO_SEND_EMAIL, status : StatusCodes.INTERNAL_SERVER_ERROR };
+    }
+   await UserModel.update({confirmationCode}, {where: {id: user.id}});
+       return {
+           ok: false,
+           status: StatusCodes.TEMPORARY_REDIRECT,
+           message : `Please check your email, or spam for verification code`,
+           body: {bearerTokens}
+       }
+   }
+    
    const comparePassword = await decrypt(password, user.password)
    if(!comparePassword) {
     throw {
@@ -127,7 +147,7 @@ export const LoginUser = async (payload:  ILogin) => {
     }
    }
    
-   const bearerTokens = await bearerToken({ fullname : user.fullname, email, id : user.id })
+   
    let resUser = ExcludeField(user.dataValues, ['password', 'confirmationCode', 'resetToken']);
    
    return {

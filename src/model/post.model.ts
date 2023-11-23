@@ -8,7 +8,8 @@ class Post extends Model {
   public desc: string;
   public live!: boolean;
   public id!: number;
-  public image_url!: string;
+  public attachment!: string;
+  public attachment_ext!: attachment_exts;
   public UserId!: number;
   public level!: levels;
   public faculty!: string;
@@ -36,8 +37,12 @@ Post.init(
       type : DataTypes.BOOLEAN,
       defaultValue : false
     },
-    image_url : {
+    attachment : {
       type : DataTypes.STRING(100),
+      allowNull : false
+    },
+    attachment_ext : {
+      type : DataTypes.STRING,
       allowNull : false
     },
     level : {
