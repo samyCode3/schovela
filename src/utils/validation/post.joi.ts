@@ -26,7 +26,7 @@ export const editPostSchema = (body: any): Promise<editPost> => {
     id: Joi.number().required(),
     title: Joi.string().optional(),
     desc: Joi.string().optional(),
-    level: Joi.any().optional().valid(...Object.values(levels)),
+    level: Joi.any().valid(...Object.values(levels)).optional(),
     faculty: Joi.string().valid(...validFaculties).optional(),
     dept: Joi.string().optional(),
     attachment: Joi.string().optional(),
