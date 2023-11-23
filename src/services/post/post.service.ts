@@ -76,9 +76,9 @@ export const editPostService = async (payload: editPost, user: IUser): Promise<A
                      await isDuplicate(payload.title);
               }
 
-              if (key === "attachment") {
-                     payload.attachment = uploadFileFromBase64(`content-${user.data.id}-${replaceAll(oldPost['title'].toLowerCase(), ' ', '-')}`, payload.attachment_ext, payload.attachment);
-              }
+              // if (key === "attachment") {
+              //        payload.attachment = uploadFileFromBase64(`content-${user.data.id}-${replaceAll(oldPost['title'].toLowerCase(), ' ', '-')}`, payload.attachment_ext, payload.attachment);
+              // }
 
               if (key !== "id") {
                      updatePayload[key] = payload[key];
@@ -113,11 +113,11 @@ export const createPostService = async (payload: createPost, user: IUser): Promi
               dbPayload.live = true;
        }
 
-       try {
-              dbPayload.attachment = uploadFileFromBase64(`content-${id}-${replaceAll(payload.title.toLowerCase(), ' ', '-')}`, payload.attachment_ext, payload.attachment);
-       } catch (error) {
-              throw { ok: false, message: messages.INTERNAL_SERVER_ERROR, status: StatusCodes.INTERNAL_SERVER_ERROR };
-       }
+       // try {
+       //        dbPayload.attachment = uploadFileFromBase64(`content-${id}-${replaceAll(payload.title.toLowerCase(), ' ', '-')}`, payload.attachment_ext, payload.attachment);
+       // } catch (error) {
+       //        throw { ok: false, message: messages.INTERNAL_SERVER_ERROR, status: StatusCodes.INTERNAL_SERVER_ERROR };
+       // }
 
        const create_post = await Post.default.create({ ...dbPayload, UserId: id })
               .then((post: any) => {
