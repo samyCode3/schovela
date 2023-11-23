@@ -27,13 +27,9 @@ export const editPostSchema = (body: any): Promise<editPost> => {
     title: Joi.string().optional(),
     desc: Joi.string().optional(),
     level: Joi.any().optional().valid(...Object.values(levels)),
-    faculty: facultySchema,
-    dept: Joi.string().when('faculty', { 
-      is: Joi.valid(...validFaculties),
-      then: Joi.valid(...validDaparment[body.faculty])
-    }),
-    attachment: Joi.string().optional().base64(),
-    attachment_ext: Joi.any().optional().valid(...Object.values(attachment_exts)),
+    faculty: Joi.string().valid(...validFaculties).optional().allow(""),
+    dept: Joi.string().optional(),
+    image_url: Joi.string().optional(),
   })
   const { error, value } = schema.validate(body, { abortEarly: false })
   if (error) {
@@ -58,8 +54,7 @@ export const createPostSchema = (body: any): Promise<createPost> => {
       is: Joi.valid(...validFaculties),
       then: Joi.valid(...(validDaparment[body.faculty] || [])) 
     }).optional(),
-    attachment: Joi.string().required().base64(),
-    attachment_ext: Joi.any().required().valid(...Object.values(attachment_exts)),// Replace 'ext1' and 'ext2' with your actual extension values
+    image_url: Joi.string().required(),
   });
   const { error, value } = schema.validate(body, { abortEarly: true })
   if (error) { 
