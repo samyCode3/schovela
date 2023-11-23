@@ -38,7 +38,7 @@ Post.init(
       defaultValue : false
     },
     attachment : {
-      type : DataTypes.STRING(100),
+      type : DataTypes.TEXT('long'),
       allowNull : false
     },
     attachment_ext : {
