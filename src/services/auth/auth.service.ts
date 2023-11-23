@@ -131,7 +131,7 @@ export const LoginUser = async (payload:  ILogin) => {
     }
    await UserModel.update({confirmationCode}, {where: {id: user.id}});
        return {
-           ok: false,
+           ok: true,
            status: StatusCodes.TEMPORARY_REDIRECT,
            message : `Please check your email, or spam for verification code`,
            body: {bearerTokens}
