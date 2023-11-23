@@ -7,6 +7,10 @@ export const ErrorMiddleware = (err, req, res, next) => {
     }
 
     if(err.status || 500) {
+<<<<<<< HEAD
         return res.status(500).json({ok : false, status : StatusCodes.INTERNAL_SERVER_ERROR, message: `INTERNAL SERVER ERROR ${err.message}`})
+=======
+        return res.status(500).json({ok : false, status : StatusCodes.INTERNAL_SERVER_ERROR, message: err.message})
+>>>>>>> parent of 2d4dedb (update on the middleware)
     }
 }
