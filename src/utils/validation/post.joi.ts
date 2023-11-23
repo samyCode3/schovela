@@ -27,9 +27,9 @@ export const editPostSchema = (body: any): Promise<editPost> => {
     title: Joi.string().optional(),
     desc: Joi.string().optional(),
     level: Joi.any().optional().valid(...Object.values(levels)),
-    faculty: facultySchema,
+    faculty: Joi.string().valid(...validFaculties).optional(),
     dept: Joi.string().optional(),
-    attachment: Joi.string().valid(...validFaculties).optional(),
+    attachment: Joi.string().optional(),
     attachment_ext: Joi.any().optional().valid(...Object.values(attachment_exts)),
   })
   const { error, value } = schema.validate(body, { abortEarly: false })
