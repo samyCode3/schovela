@@ -26,9 +26,9 @@ export const editPostSchema = (body: any): Promise<editPost> => {
     id: Joi.number().required(),
     title: Joi.string().optional(),
     desc: Joi.string().optional(),
-    level: Joi.any().valid(...Object.values(levels)).optional(),
-    faculty: Joi.string().valid(...validFaculties).optional(),
-    dept: Joi.string().optional(),
+    level: Joi.any().valid(...Object.values(levels)).optional().allow(""),
+    faculty: Joi.string().valid(...validFaculties).optional().allow(""),
+    dept: Joi.string().optional().allow(""),
     attachment: Joi.string().optional(),
     attachment_ext: Joi.any().optional().valid(...Object.values(attachment_exts)),
   })
@@ -49,7 +49,7 @@ export const createPostSchema = (body: any): Promise<createPost> => {
   const schema = Joi.object({
     title: Joi.string().required(), 
     desc: Joi.string().optional(),
-    level: Joi.any().optional().valid(...Object.values(levels)), // Replace 'level1' and 'level2' with your actual level values
+    level: Joi.any().optional().valid(...Object.values(levels)).allow(""), // Replace 'level1' and 'level2' with your actual level values
     faculty: Joi.string().valid(...validFaculties).optional().allow(""),
     dept: Joi.when('faculty', { 
       is: Joi.valid(...validFaculties),
