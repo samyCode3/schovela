@@ -26,9 +26,9 @@ export const editPostSchema = (body: any): Promise<editPost> => {
     id: Joi.number().required(),
     title: Joi.string().optional(),
     desc: Joi.string().optional(),
-    level: Joi.any().valid(...Object.values(levels)).optional().allow(""),
-    faculty: Joi.string().valid(...validFaculties).optional().allow(""),
-    dept: Joi.string().optional().allow(""),
+    level: Joi.any().valid(...Object.values(levels)).optional().allow("").allow(null),
+    faculty: Joi.string().valid(...validFaculties).optional().allow("").allow(null),
+    dept: Joi.string().optional().allow("").allow(null),
     attachment: Joi.string().optional(),
     attachment_ext: Joi.any().optional().valid(...Object.values(attachment_exts)),
   })
@@ -49,12 +49,12 @@ export const createPostSchema = (body: any): Promise<createPost> => {
   const schema = Joi.object({
     title: Joi.string().required(), 
     desc: Joi.string().optional(),
-    level: Joi.any().optional().valid(...Object.values(levels)).allow(""), // Replace 'level1' and 'level2' with your actual level values
-    faculty: Joi.string().valid(...validFaculties).optional().allow(""),
+    level: Joi.any().optional().valid(...Object.values(levels)).allow("").allow(null), // Replace 'level1' and 'level2' with your actual level values
+    faculty: Joi.string().valid(...validFaculties).optional().allow("").allow(null),
     dept: Joi.when('faculty', { 
       is: Joi.valid(...validFaculties),
       then: Joi.valid(...(validDaparment[body.faculty] || [])) 
-    }).optional(),
+    }).optional().allow(null).allow(""),
     attachment: Joi.string().required(),
     attachment_ext: Joi.any().required().valid(...Object.values(attachment_exts)),// Replace 'ext1' and 'ext2' with your actual extension values
   });
