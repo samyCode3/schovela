@@ -1,6 +1,6 @@
 import { NextFunction } from "express";
-import { createPostService, editPostService, hidePostService, getPostService, getAllPostService, getAllPostByIdService } from "../services/post/index.post";
-import { createPostSchema, editPostSchema, filterPostValidation, hidePostSchema } from "../utils/validation/post.joi";
+import { createPostService, editPostService, hidePostService, getPostService, getAllPostService, getAllPostByIdService, downloadDocumentService } from "../services/post/index.post";
+import { createPostSchema, downloadDocumentvalidation, editPostSchema, filterPostValidation, hidePostSchema } from "../utils/validation/post.joi";
 
 
 
@@ -66,8 +66,20 @@ export default {
       } catch (error) {
          next(error)
       }
+   },
+   downloadDocumentController:  async (req: Request | any, res: Response | any, next: NextFunction) => {
+        const { user, params} = req
+        let userAgent = req.headers['user-agent']
+        let ipAddress = req.ip
+        try {
+          const payload =  await downloadDocumentvalidation(params)
+          let download = await downloadDocumentService(payload.postId, ipAddress, userAgent, user)
+          return res.status(download.status).json({...download})
+          
+        } catch (error) {
+         next(error)
+        }
    }
 }
-
 
 

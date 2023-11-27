@@ -4,10 +4,11 @@ import { UserModel } from "../../model/user.model"
 import messages from "../../utils/messages"
 import { FilterUsersType, IElevate, Ifilter } from "../../interface/admin.interface"
 import { PostModel } from "../../model/post.model"
+import { ROLE } from "../../interface/user.interface"
 
 
 export const total_number_of_user = async () => {
-    const total_user = await UserModel.count({ where : { status : {  [Op.not] : false } } });
+    const total_user = await UserModel.count({ where : { role : {  [Op.not] : ROLE.admin } } });
     const total_content = await PostModel.count()
     return {
         ok : true,

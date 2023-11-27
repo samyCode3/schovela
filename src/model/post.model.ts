@@ -14,7 +14,8 @@ class Post extends Model {
   public level!: levels;
   public faculty!: string;
   public dept!: string;
-  public last_updated_by!: ROLE
+  public last_updated_by!: ROLE;
+  public downloaded : number
 }
 
 Post.init(
@@ -60,6 +61,10 @@ Post.init(
     last_updated_by : {
       type : DataTypes.ENUM(...Object.values(ROLE)),
       defaultValue : ROLE.admin
+    },
+    downloaded: {
+       type: DataTypes.INTEGER,
+       defaultValue: 0
     }
   },
   

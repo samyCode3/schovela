@@ -11,5 +11,6 @@ postRoutes.get('/', AuthUser, PostController.default.getAllcontroller)
 postRoutes.post('/hide-unhide', AuthUser, PostController.default.hidecontroller)
 postRoutes.get('/:id', AuthUser, PostController.default.getPostControllerById)
 postRoutes.get('/views/:postId',AuthUser, ViewPostController)
+postRoutes.post('/download/:postId', AuthUser, PostController.default.downloadDocumentController)
 
 // postRoutes.get('/admin/uploaded', AuthUser, IsAdmin,PostController.default.getAllPostByIdController)
