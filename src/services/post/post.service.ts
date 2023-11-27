@@ -88,9 +88,8 @@ export const editPostService = async (payload: editPost, user: IUser): Promise<A
 
        const edit_post = await Post.default.edit(id, updatePayload)
               .then((post: any) => {
-                     // if (payload.attachment) {
-                     //        deleteUpload(oldPost['attachment']);
-                     // }
+                  
+                  
 
                      return { ok: true, status: StatusCodes.OK, message: "Success", body: { post } }
               })

@@ -6,6 +6,7 @@ import { createPost, editPost, hidePost } from '../../interface';
 import { attachment_exts, levels } from '../../interface/enum/enum';
 import { FilterPostInterface } from '../../interface/post.interface';
 import { FieldOfStudy, fieldsOfStudy } from '../../interface/faculty';
+import { IDownload } from '../../model/download.model';
 
 const validFaculties = Object.values(FieldOfStudy);
 const validDaparment =  fieldsOfStudy
@@ -80,4 +81,17 @@ export const filterPostValidation = async (body : FilterPostInterface): Promise<
     throw { ok: false, status: StatusCodes.BAD_REQUEST, message: error.message };
   }
   return value;
+}
+
+
+export const downloadDocumentvalidation = async (body: IDownload): Promise<IDownload> =>  {
+     const schema =  Joi.object({
+      postId: Joi.number().required()
+     })
+     const { error, value } = schema.validate(body, { abortEarly: true })
+     if (error) {
+       throw { ok: false, status: StatusCodes.BAD_REQUEST, message: error.message };
+     }
+     return value;
+
 }
