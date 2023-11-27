@@ -32,7 +32,7 @@ export const editPostSchema = (body: any): Promise<editPost> => {
     attachment: Joi.string().optional(),
     attachment_ext: Joi.any().optional().valid(...Object.values(attachment_exts)),
   })
-  const { error, value } = schema.validate(body, { abortEarly: false })
+  const { error, value } = schema.validate(body, { abortEarly: true })
   if (error) {
     throw { ok: false, status: StatusCodes.BAD_REQUEST, message: error.message };
   }

@@ -9,5 +9,6 @@ export const mail = createTransport({
     auth: {
         user: config.mailgun.USER,
         pass: config.mailgun.PASS
-    }
+    } 
 }) 
+   
