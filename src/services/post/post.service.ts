@@ -12,6 +12,7 @@ import { FilterPostInterface } from '../../interface/post.interface'
 import { UserModel } from '../../model/user.model'
 import { Op, Sequelize } from 'sequelize'
 import { ViewModel } from '../../model/view.model'
+import { ViewPostsService } from './views.service'
 
 export const isDuplicate = async (title: string): Promise<void> => {
        const searchDuplicate = await PostModel.findOne({ where: { title } });
@@ -212,7 +213,8 @@ export const postCheck = async (id: number) => {
               })
        return getPostId
 }
-export const getPostService = async (id: number) => {
+export const getPostService = async (id: number,ipAddress: string, userAgent: string, user: IUser) => {
+
        const post = await PostModel.findOne({ where: { id }, include: [UserModel] })
        if(!post) {
               throw {
@@ -221,12 +223,13 @@ export const getPostService = async (id: number) => {
                      messages : `post not found`
               }
        }
-       const views = await ViewModel.count({where: {postId: id}})
+       const views = await ViewPostsService(post.id, ipAddress, userAgent, user)
+       let total_views = await ViewModel.count({where: {postId: post.id}})
        return {
               ok: true,
               status: StatusCodes.OK,
               messages: `Post retrived`,
-              body: {post, views}
+              body: {post, views, total_views}
               
        }
 }

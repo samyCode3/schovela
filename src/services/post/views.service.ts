@@ -5,8 +5,9 @@ import { ViewModel } from "../../model/view.model";
 import { Op } from "sequelize";
 import { ApiResponseType } from "../../interface/api.interface";
 
-export const ViewPostsService = async (postId: number, ipAddress: string, userAgent: string, user: IUser): Promise<ApiResponseType> => {
+export const ViewPostsService = async (postId: number, ipAddress: string, userAgent: string, user?: IUser): Promise<ApiResponseType> => {
    let { id, role } = user.data;
+
    let views : any
    let total_views: any
    let post = await PostModel.findOne({where: {id : postId}})
@@ -48,11 +49,6 @@ export const ViewPostsService = async (postId: number, ipAddress: string, userAg
          ipAddress: ipAddress,
       })
     }
-    total_views = await ViewModel.count({where: {postId}})
-     return {
-      ok: true,
-      status: StatusCodes.OK,
-      message: `This post got ${total_views} view/views`,
-      body : {views, total_views}
-     }
+
+     return views
 }

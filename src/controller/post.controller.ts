@@ -49,9 +49,11 @@ export default {
 
    getPostControllerById: async (req: Request | any, res: Response | any, next: NextFunction) => {
       const { user, params, body, url } = req
+      let userAgent = req.headers['user-agent']
+      let ipAddress = req.ip
       try {
          const payload = await hidePostSchema(params);
-         const post = await getPostService(payload.id)
+         const post = await getPostService(payload.id, ipAddress, userAgent, user)
          return res.status(post.status).json({ ...post })
       } catch (error) {
          next(error)
