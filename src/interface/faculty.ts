@@ -11,6 +11,36 @@ enum FieldOfStudy {
     VeterinaryMedicine = "VETERINARY MEDICINE",
     ManagementScience = "MANAGEMENT SCIENCE",
     ChemicalAndLifeScience = "CHEMICAL AND LIFE SCIENCE",
+    ClinicalPharmacyAndPharmacyPractice = "CLINICAL PHARMACY AND PHARMACY PRACTICE",
+    PharmaceuticalAndMedicinalChemistry = "PHARMACEUTICAL AND MEDICINAL CHEMISTRY",
+    PharmaceuticsAndPharmaceuticalMicrobiology = "PHARMACEUTICS AND PHARMACEUTICAL MICROBIOLOGY",
+    PharmacognosyAndEthnoPharmacy = "PHARMACOGNOSY AND ETHNO PHARMACY",
+    PharmacologyAndToxicology = "PHARMACOLOGY AND TOXICOLOGY",
+    MedicineAndSurgery = "MEDICINE AND SURGERY",
+    CommunityHealth = "COMMUNITY HEALTH",
+    NursingSciences = "NURSING SCIENCES",
+    ObstetricsAndGynaecology = "OBSTETRICS AND GYNAECOLOGY",
+    Paediatrics = "PAEDIATRICS",
+    Psychiatry = "PSYCHIATRY",
+    Radiology = "RADIOLOGY",
+    Radiography = "RADIOGRAPHY",
+    HumanNutritionAndDietetics = "HUMAN NUTRITION AND DIETETICS",
+    Optometry = "OPTOMETRY",
+    Physiotherapy = "PHYSIOTHERAPY",
+    DentalScience = "DENTAL SCIENCE",
+    OralAndMaxillofacialSurgery = "ORAL AND MAXILLOFACIAL SURGERY",
+    OralAndMaxillofacialPathologySurgery = "ORAL AND MAXILLOFACIAL PATHOLOGY/SURGERY",
+    ChildDentalHealth = "CHILD DENTAL HEALTH",
+    PreventiveDentistry = "PREVENTIVE DENTISTRY",
+    RestorativeDentistry = "RESTORATIVE DENTISTRY",
+    Anatomy = "ANATOMY",
+    MedicalBiochemistry = "MEDICAL BIOCHEMISTRY",
+    Physiology = "PHYSIOLOGY",
+    MedicalLaboratoryScience = "MEDICAL LABORATORY SCIENCE",
+    ChemicalPathology = "CHEMICAL PATHOLOGY",
+    Haematology = "HAEMATOLOGY",
+    Histopathology = "HISTOPATHOLOGY",
+    MedicalMicrobiologyImmunology = "MEDICAL MICROBIOLOGY IMMUNOLOGY",
     Gst = "GST",
   }
   
@@ -27,6 +57,36 @@ enum FieldOfStudy {
     [FieldOfStudy.VeterinaryMedicine]: string[];
     [FieldOfStudy.ManagementScience]: string[];
     [FieldOfStudy.ChemicalAndLifeScience]: string[];
+    [FieldOfStudy.ClinicalPharmacyAndPharmacyPractice]: string[];
+    [FieldOfStudy.PharmaceuticalAndMedicinalChemistry]: string[];
+    [FieldOfStudy.PharmaceuticsAndPharmaceuticalMicrobiology]: string[];
+    [FieldOfStudy.PharmacognosyAndEthnoPharmacy]: string[];
+    [FieldOfStudy.PharmacologyAndToxicology]: string[];
+    [FieldOfStudy.MedicineAndSurgery]: string[];
+    [FieldOfStudy.CommunityHealth]: string[];
+    [FieldOfStudy.NursingSciences]: string[];
+    [FieldOfStudy.ObstetricsAndGynaecology]: string[];
+    [FieldOfStudy.Paediatrics]: string[];
+    [FieldOfStudy.Psychiatry]: string[];
+    [FieldOfStudy.Radiology]: string[];
+    [FieldOfStudy.Radiography]: string[];
+    [FieldOfStudy.HumanNutritionAndDietetics]: string[];
+    [FieldOfStudy.Optometry]: string[];
+    [FieldOfStudy.Physiotherapy]: string[];
+    [FieldOfStudy.DentalScience]: string[];
+    [FieldOfStudy.OralAndMaxillofacialSurgery]: string[];
+    [FieldOfStudy.OralAndMaxillofacialPathologySurgery]: string[];
+    [FieldOfStudy.ChildDentalHealth]: string[];
+    [FieldOfStudy.PreventiveDentistry]: string[];
+    [FieldOfStudy.RestorativeDentistry]: string[];
+    [FieldOfStudy.Anatomy]: string[];
+    [FieldOfStudy.MedicalBiochemistry]: string[];
+    [FieldOfStudy.Physiology]: string[];
+    [FieldOfStudy.MedicalLaboratoryScience]: string[];
+    [FieldOfStudy.ChemicalPathology]: string[];
+    [FieldOfStudy.Haematology]: string[];
+    [FieldOfStudy.Histopathology]: string[];
+    [FieldOfStudy.MedicalMicrobiologyImmunology]: string[];
     [FieldOfStudy.Gst]: any;
   }
   
@@ -99,7 +159,67 @@ enum FieldOfStudy {
       "Pure and Environmental Chemistry",
       "Zoology",
     ],
-    [FieldOfStudy.Gst]: [],
+    [FieldOfStudy.ClinicalPharmacyAndPharmacyPractice]: [
+        "Clinical Pharmacy",
+        "Pharmacy Practice",
+      ],
+      [FieldOfStudy.PharmaceuticalAndMedicinalChemistry]: [
+        "Pharmaceutical Chemistry",
+        "Medicinal Chemistry",
+      ],
+      [FieldOfStudy.PharmaceuticsAndPharmaceuticalMicrobiology]: [
+        "Pharmaceutics",
+        "Pharmaceutical Microbiology",
+      ],
+      [FieldOfStudy.PharmacognosyAndEthnoPharmacy]: [
+        "Pharmacognosy",
+        "Ethno Pharmacy",
+      ],
+      [FieldOfStudy.PharmacologyAndToxicology]: [
+        "Pharmacology",
+        "Toxicology",
+      ],
+      [FieldOfStudy.MedicineAndSurgery]: [
+        "Community Health",
+        "Medicine",
+        "Nursing Sciences",
+        "Obstetrics and Gynaecology",
+        "Paediatrics",
+        "Psychiatry",
+        "Radiology",
+        "Radiography",
+        "Surgery",
+      ],
+      [FieldOfStudy.CommunityHealth]: ["Community Health"],
+      [FieldOfStudy.NursingSciences]: ["Nursing Sciences"],
+      [FieldOfStudy.ObstetricsAndGynaecology]: ["Obstetrics and Gynaecology"],
+      [FieldOfStudy.Paediatrics]: ["Paediatrics"],
+      [FieldOfStudy.Psychiatry]: ["Psychiatry"],
+      [FieldOfStudy.Radiology]: ["Radiology"],
+      [FieldOfStudy.Radiography]: ["Radiography"],
+      [FieldOfStudy.HumanNutritionAndDietetics]: ["Human Nutrition and Dietetics"],
+      [FieldOfStudy.Optometry]: ["Optometry"],
+      [FieldOfStudy.Physiotherapy]: ["Physiotherapy"],
+      [FieldOfStudy.DentalScience]: ["Dentistry"],
+      [FieldOfStudy.OralAndMaxillofacialSurgery]: ["Oral and Maxillofacial Surgery"],
+      [FieldOfStudy.OralAndMaxillofacialPathologySurgery]: [
+        "Oral and Maxillofacial Pathology/Surgery",
+      ],
+      [FieldOfStudy.ChildDentalHealth]: ["Child Dental Health"],
+      [FieldOfStudy.PreventiveDentistry]: ["Preventive Dentistry"],
+      [FieldOfStudy.RestorativeDentistry]: ["Restorative Dentistry"],
+      [FieldOfStudy.Anatomy]: ["Anatomy"],
+      [FieldOfStudy.MedicalBiochemistry]: ["Medical Biochemistry"],
+      [FieldOfStudy.Physiology]: ["Physiology"],
+      [FieldOfStudy.MedicalLaboratoryScience]: ["Medical Laboratory Science"],
+      [FieldOfStudy.ChemicalPathology]: ["Chemical Pathology"],
+      [FieldOfStudy.Haematology]: ["Haematology"],
+      [FieldOfStudy.Histopathology]: ["Histopathology"],
+      [FieldOfStudy.MedicalMicrobiologyImmunology]: [
+        "Medical Microbiology",
+        "Immunology",
+      ],
+       [FieldOfStudy.Gst]: [],
   };
   
   export { FieldOfStudy, FieldOptions, fieldsOfStudy };
