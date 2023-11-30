@@ -89,8 +89,8 @@ export const editPostService = async (payload: editPost, user: IUser): Promise<A
 
        const edit_post = await Post.default.edit(id, updatePayload)
               .then((post: any) => {
-                  
-                  
+
+
 
                      return { ok: true, status: StatusCodes.OK, message: "Success", body: { post } }
               })
@@ -132,26 +132,50 @@ export const createPostService = async (payload: createPost, user: IUser): Promi
 }
 
 export const getAllPostService = async (payload: FilterPostInterface, user: IUser) => {
-       let { id, role } = user.data
-       let {  limit, offset, live } = payload
+       let { id, role, level, department, faculty } = user.data
+       let { limit, offset, live } = payload
        let post: any
        let where: any = { live: true };
- 
+
        if (user.data.role == ROLE.admin) {
               delete where.live;
        }
-        
+
        if (user.data.role === ROLE.user && payload.live === false) {
               where.UserId = id;
               where.live = false;
-          } 
+       }
+
+
 
        let filters: any = payload;
-       delete filters.limit; 
+       delete filters.limit;
        delete filters.offset;
 
        let filterKeys = Object.keys(filters);
 
+       if (filterKeys.length < 1 && user.data.role === ROLE.user) {
+
+              if (department !== "") {
+                     where.UserId = id
+                     where = { dept: department }
+              }
+              if (faculty !== "") {
+                     where.UserId = id
+                     where = { faculty: user.data.faculty }
+              }
+
+
+              if (level !== "") {
+                     where.UserId = id
+                     where = { level: user.data.level }
+              }
+
+              // if(department !== "" || faculty !== "" || level !== "") [
+              //        where = { dept: department, faculty: user.data.faculty, level: user.data.level }
+              // ]
+
+       }
        for (let i = 0; i < filterKeys.length; i++) {
               let key = filterKeys[i];
 
@@ -159,11 +183,11 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
                      if (user.data.role === ROLE.admin) {
                             where[key] = filters[key];
                      }
-                    
+
                      continue;
               }
 
-             
+
 
               if (key == "search") {
                      where.title = Sequelize.where(
@@ -179,16 +203,16 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
                      where[key] = filters[key];
               }
        }
-
+       console.log(where)
        let count = await PostModel.count({ where });
        let total_pages = Math.ceil(count / limit)
        post = await PostModel.findAll({ where, limit, offset, order: [['id', 'DESC']] })
 
-       if (offset > 0) { 
-              offset = offset * limit; 
+       if (offset > 0) {
+              offset = offset * limit;
        }
 
-       return { 
+       return {
               ok: true,
               status: StatusCodes.OK,
               message: `Data Retrived`,
@@ -213,24 +237,24 @@ export const postCheck = async (id: number) => {
               })
        return getPostId
 }
-export const getPostService = async (id: number,ipAddress: string, userAgent: string, user: IUser) => {
+export const getPostService = async (id: number, ipAddress: string, userAgent: string, user: IUser) => {
 
        const post = await PostModel.findOne({ where: { id }, include: [UserModel] })
-       if(!post) {
+       if (!post) {
               throw {
                      ok: false,
                      status: StatusCodes.BAD_REQUEST,
-                     messages : `post not found`
+                     messages: `post not found`
               }
        }
        const views = await ViewPostsService(post.id, ipAddress, userAgent, user)
-       let total_views = await ViewModel.count({where: {postId: post.id}})
+       let total_views = await ViewModel.count({ where: { postId: post.id } })
        return {
               ok: true,
               status: StatusCodes.OK,
               messages: `Post retrived`,
-              body: {post, views, total_views}
-              
+              body: { post, views, total_views }
+
        }
 }
 
@@ -239,7 +263,7 @@ export const getAllPostByIdService = async (user: IUser) => {
        let { id } = user
        let userId = id
        const posts = await Post.default.getAllPostbyId(userId)
-       
+
               .then((post: any) => {
                      return { ok: true, status: StatusCodes.OK, message: "Success", body: { post } }
               })
