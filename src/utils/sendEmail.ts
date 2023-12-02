@@ -19,7 +19,7 @@ export const sendMail = async (details: { to: Array<string>, subject: string, te
     let { to, subject, text, html } = details;
     let readyTo = to.join(', '); 
     const send = await mail.sendMail({
-        from: `"${process.env.SMTP_SENDER}" <${process.env.SMTP_USER}>`,
+        from: `"${process.env.SMTP_SENDER}" <${process.env.SMTP_EMAIL}>`,
         to : readyTo,
         subject,
         text,
