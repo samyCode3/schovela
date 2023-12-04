@@ -50,7 +50,8 @@ export default {
    getPostControllerById: async (req: Request | any, res: Response | any, next: NextFunction) => {
       const { user, params, body, url } = req
       let userAgent = req.headers['user-agent']
-      let ipAddress = req.ip
+      let ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      ipAddress = ipAddress ? ipAddress.split(',')[0].trim() : null;
       try {
          const payload = await hidePostSchema(params);
          const post = await getPostService(payload.id, ipAddress, userAgent, user)
@@ -72,7 +73,8 @@ export default {
    downloadDocumentController:  async (req: Request | any, res: Response | any, next: NextFunction) => {
         const { user, params} = req
         let userAgent = req.headers['user-agent']
-        let ipAddress = req.ip
+        let ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        ipAddress = ipAddress ? ipAddress.split(',')[0].trim() : null;
         try {
           const payload =  await downloadDocumentvalidation(params)
           let download = await downloadDocumentService(payload.postId, ipAddress, userAgent, user)
