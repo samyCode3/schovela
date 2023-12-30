@@ -152,28 +152,28 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
 
        let filterKeys = Object.keys(filters);
 
-       if (filterKeys.length < 1 && user.data.role === ROLE.user) {
+       // if (filterKeys.length < 1 && user.data.role === ROLE.user) {
 
-              if (department) {
-                     where.UserId = id
-                     where.dept = department;
-              }
-              if (faculty) {
-                     where.UserId = id
-                     where.faculty = user.data.faculty;
-              }
+              // if (department) {
+                     // where.UserId = id
+              //        where.dept = department;
+              // }
+              // if (faculty) {
+                     // where.UserId = id
+              //        where.faculty = user.data.faculty;
+              // }
 
 
-              if (level) {
-                     where.UserId = id
-                     where.level = user.data.level
-              }
+              // if (level) {
+                     // where.UserId = id
+              //        where.level = user.data.level
+              // }
 
               // if(department !== "" || faculty !== "" || level !== "") [
               //        where = { dept: department, faculty: user.data.faculty, level: user.data.level }
               // ]
 
-       }
+       // }
 
        for (let i = 0; i < filterKeys.length; i++) {
               let key = filterKeys[i]; 
@@ -202,7 +202,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
                      where[key] = filters[key];
               }
        }
-       
+       // console.log(where)
        let count = await PostModel.count({ where });
        let total_pages = Math.ceil(count / limit)
        post = await PostModel.findAll({ where, limit, offset, order: [['id', 'DESC']] }) 
