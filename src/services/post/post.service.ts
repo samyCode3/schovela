@@ -135,7 +135,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
        let { id, role, level, department, faculty } = user.data
        let { limit, offset, live } = payload
        let post: any
-       let where: any = { live: true };
+       let where: any = { live: 0 };
 
        if (user.data.role == ROLE.admin) {
               delete where.live;
