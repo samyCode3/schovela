@@ -156,7 +156,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
 
               if (!department) {
                      // where.UserId = id
-                     where.dept = department;
+                     where.dept = user.data.department;
               }
               if (!faculty) {
                      // where.UserId = id
