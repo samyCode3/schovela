@@ -135,7 +135,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
        let { id, role, level, department, faculty } = user.data
        let { limit, offset, live } = payload
        let post: any
-       let where: any = { live: 1 };
+       let where: any = { live: true };
 
        if (user.data.role == ROLE.admin) {
               delete where.live;
@@ -146,8 +146,6 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
               where.live = false;
        }
 
-
-
        let filters: any = payload;
        delete filters.limit;
        delete filters.offset;
@@ -156,19 +154,19 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
 
        if (filterKeys.length < 1 && user.data.role === ROLE.user) {
 
-              if (department != null) {
+              if (department) {
                      where.UserId = id
-                     where = { dept: department }
+                     where.dept = department;
               }
-              if (faculty != null) {
+              if (faculty) {
                      where.UserId = id
-                     where = { faculty: user.data.faculty }
+                     where.faculty = user.data.faculty;
               }
 
 
-              if (level != null) {
+              if (level) {
                      where.UserId = id
-                     where = { level: user.data.level }
+                     where.level = user.data.level
               }
 
               // if(department !== "" || faculty !== "" || level !== "") [
@@ -176,6 +174,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
               // ]
 
        }
+
        for (let i = 0; i < filterKeys.length; i++) {
               let key = filterKeys[i]; 
 
@@ -203,7 +202,7 @@ export const getAllPostService = async (payload: FilterPostInterface, user: IUse
                      where[key] = filters[key];
               }
        }
-       console.log(where)
+       
        let count = await PostModel.count({ where });
        let total_pages = Math.ceil(count / limit)
        post = await PostModel.findAll({ where, limit, offset, order: [['id', 'DESC']] }) 
