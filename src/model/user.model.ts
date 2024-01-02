@@ -14,7 +14,8 @@ class User extends Model {
    phone: string;
    confirmationCode: string;
    status : boolean;
-   resetToken : string
+   resetToken : string;
+   profile_img: string;
    role: ROLE
 }
 
@@ -67,6 +68,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "",
+    },
+    profile_img: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     resetToken : {
       type: DataTypes.STRING,
