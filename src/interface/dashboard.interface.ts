@@ -1,5 +1,6 @@
 export interface IProfile {
-    bio?: string,
+    level?: string,
+    profile_img?: string,
     
 }
 export interface IFile {

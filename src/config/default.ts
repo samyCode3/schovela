@@ -13,7 +13,7 @@ export default {
       PORT: process.env.SMTP_PORT,
       SECURE: process.env.SMTP_SECURE,
       USER: process.env.SMTP_USER,
-      PASS: process.env.SMTP_PASSWORD
+      PASS: process.env.SMTP_PASSWORD 
   },
   token: {
    BEARER_TOKEN: process.env.BEARER_TOKEN,

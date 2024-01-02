@@ -1,1 +1,1 @@
-export {UploadFileValidation} from './dashboard.joi'
+export {UpdateProfileValidation } from './dashboard.joi'

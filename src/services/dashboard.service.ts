@@ -5,31 +5,47 @@ import { getById, DeleteById, create, updateOne, getByuserId, DeleteByUserId} fr
 import { IProfile, IFile, ProfileId } from "../interface/dashboard.interface";
 import * as fs  from "fs";
 import { IUser, ROLE } from "../interface/user.interface";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import { PostModel } from "../model/post.model";
 import { ViewModel } from "../model/view.model";
 import { ApiResponseType } from "../interface/api.interface";
 
 
-export const UploadProfile = async (payload: IProfile, file: IFile, user: IUser) => {
-    let {id} = user.data
-    let upload: any
-    let {profile_img} = file
-    profile_img = file.filename
-    let path = file.path
-    let userId = id
-    await DeleteById(userId, ProfileModel)
-    upload = await create({...payload, profile_img, path, userId}, ProfileModel)
-    if(!upload) {
-        fs.unlinkSync(file.path)
+export const updateProfile = async (payload: IProfile, user: IUser) => {
+    const {id} = user.data
+    const {level, profile_img} = payload
+    let user_profile = await UserModel.findOne({ where: { id } });
+
+    if (!user_profile) {
+        throw {
+            ok: false,
+            status: StatusCodes.BAD_REQUEST,
+            message: `Unable to find user with this id => ${id}`
+        };
     }
+
+    await UserModel.update({ level, profile_img }, { where: { id } });
+
+    // Fetch the updated user profile after the update
+    user_profile = await UserModel.findOne({ where: { id } });
+
+    if (!user_profile) {
+        throw {
+            ok: false,
+            status: StatusCodes.INTERNAL_SERVER_ERROR,
+            message: `Failed to fetch updated profile for user with id => ${id}`
+        };
+    }
+
     return {
         ok: true,
         status: StatusCodes.OK,
-        message : "Success",
-        body : {upload}
-    }
-}
+        message: `Profile was updated successfully`,
+        body: { user_profile }
+    };
+    
+
+ }
 
 export const getProfileImage = async (user: any) => {
     
@@ -44,32 +60,5 @@ export const getProfileImage = async (user: any) => {
    }
 }
 
-export const updateProfile = async (payload: IProfile, file: IFile, user: IUser) => {
-    const {id} = user
-    const {bio} = payload
-    let userId = id
-    let profile = await getByuserId(userId, ProfileModel)
-    if(profile) {
-        await updateOne({bio, file}, userId, ProfileModel)
-    }
-    
-    return {
-        ok : true,
-        status : StatusCodes.OK,
-        message : "Sucess",
-        body : {}
-       }
-}
 
-export const deleteProfile = async ( user: IUser) => {
-    const {id} = user.data
-    let userId = id 
-     await DeleteByUserId(userId, ProfileModel)
-     return {
-        ok : true,
-        status : StatusCodes.OK,
-        message : "Sucess",
-        body : {}
-       }
-}
 

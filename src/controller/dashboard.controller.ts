@@ -1,18 +1,18 @@
 import {NextFunction} from 'express'
 import { 
-    UploadProfile, 
     getProfileImage, 
     updateProfile, 
-    deleteProfile 
+ 
 } from '../services/index.service'
-import { UploadFileValidation } from '../utils/validation/index.joi'
+import { UpdateProfileValidation } from '../utils/validation/index.joi'
 
-export const UploadProfileController = async (req: Request | any, res : Response | any, next : NextFunction) => {
-    let {user, body, file} = req
+
+export const UpdateProfileController =async (req: Request | any, res : Response | any, next : NextFunction) => {
+    let {user, body} = req
     try {
-       let profile = await UploadFileValidation(file)
-       profile = await UploadProfile(body, profile, user)
-       return res.status(profile.status).json({...profile})
+       let payload = await UpdateProfileValidation(body)
+       let profile = await updateProfile(payload, user)
+       return res.status(200).json({...profile})
     } catch (error) {
         let err = new Error(error)
         console.log(`${err}`)
@@ -20,6 +20,8 @@ export const UploadProfileController = async (req: Request | any, res : Response
      
     }
 }
+
+
 
 export const getProfileImageController = async (req: Request | any, res : Response | any, next : NextFunction) => {
     let {user} = req
@@ -33,30 +35,5 @@ export const getProfileImageController = async (req: Request | any, res : Respon
      
     }
 }
-export const updateProfileController = async (req: Request | any, res : Response | any, next : NextFunction) => {
-    let {body, file, user} = req
-    try {
-       let profile = await UploadFileValidation(file)
-        profile = await updateProfile(body, profile, user)
-       return res.status(profile.status).json({...profile})
-    } catch (error) {
-        let err = new Error(error)
-        console.log(`${err}`)
-        next(error)
-     
-    }
-}
 
-export const deleteProfileController = async (req: Request | any, res : Response | any, next : NextFunction) => {
-    let {user} = req
-    try {
-       let profile = await deleteProfile(user)
-       return res.status(profile.status).json({...profile})
-    } catch (error) {
-        let err = new Error(error)
-        console.log(`${err}`)
-        next(error)
-     
-    }
-}
 

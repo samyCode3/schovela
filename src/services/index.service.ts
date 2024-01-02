@@ -1,6 +1,4 @@
 export {
-    UploadProfile,
-    getProfileImage,
     updateProfile,
-    deleteProfile
+    getProfileImage,
 } from './dashboard.service'
